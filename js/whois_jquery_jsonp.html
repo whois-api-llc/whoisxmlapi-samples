@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JQuery JSONP Sample</title>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        var username = "YOUR_USERNAME";
+        var password = "YOUR_PASSWORD";
+        var domain = "google.com";
+        var jsonCallback = "LoadJSON";
+
+        $(function () {
+            $.ajax({
+                url: "http://www.whoisxmlapi.com/whoisserver/WhoisService?callback=?",
+
+                jsonp: jsonCallback,
+                dataType: "jsonp",
+
+                data: {
+                    username: username,
+                    password: password,
+                    domainName: domain,
+                    outputFormat: "json"
+                },
+
+                success: function (response) {
+                    $("#json").append("<div>JSON answer:</div>" + JSON.stringify(response, null, 2));
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<pre id="json"></pre>
+</body>
+</html>
