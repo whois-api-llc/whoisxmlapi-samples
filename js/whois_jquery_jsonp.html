@@ -8,13 +8,11 @@
         var username = "YOUR_USERNAME";
         var password = "YOUR_PASSWORD";
         var domain = "google.com";
-        var jsonCallback = "LoadJSON";
 
         $(function () {
             $.ajax({
                 url: "http://www.whoisxmlapi.com/whoisserver/WhoisService?callback=?",
 
-                jsonp: jsonCallback,
                 dataType: "jsonp",
 
                 data: {
@@ -26,6 +24,9 @@
 
                 success: function (response) {
                     $("#json").append("<div>JSON answer:</div>" + JSON.stringify(response, null, 2));
+                },
+                error: function(e){
+                    console.log(e);
                 }
             });
         });
