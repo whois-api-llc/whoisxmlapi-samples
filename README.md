@@ -83,7 +83,7 @@ public class SimpleQuery {
 [Browse all JS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/js)
 
 
-```javascript
+```html
 <!DOCTYPE html>
 <html>
 <head>
