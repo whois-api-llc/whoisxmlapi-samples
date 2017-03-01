@@ -124,9 +124,8 @@ public class SimpleQuery {
 
 [Browse all .Net samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/net)
 
-> Note that you need to make sure your Project is set to ".NET Framework 4" and NOT ".NET Framework 4 Client Profile"
-> Once that is set, make sure the following references are present under the References tree under the project:
-> Microsoft.CSharp, System, System.Web.Extensions, and System.XML
+> Note that you need to make sure your Project is set to ".NET Framework 4" and NOT ".NET Framework 4 Client Profile".
+> Once that is set, make sure the following references are present under the References tree under the project: Microsoft.CSharp, System, System.Web.Extensions, and System.XML
 
 
 ```c#
