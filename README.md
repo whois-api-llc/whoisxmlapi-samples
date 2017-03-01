@@ -145,29 +145,27 @@ namespace Sample_CSharp_API_Client
     {
         static void Main(string[] args)
         {
-            //////////////////////////
-            // Fill in your details //
-            //////////////////////////
+            // Fill in your details
             string username = "YOUR_USERNAME";
             string password = "YOUR_PASSWORD";
             string domain = "google.com";
 
-            /////////////////////////
-            // Use a JSON resource //
-            /////////////////////////
             string format = "JSON";
             string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" 
-						+ domain 
-						+ "&username=" + username 
-						+ "&password=" + password 
-						+ "&outputFormat=" + format;
+        			+ domain 
+        			+ "&username=" + username 
+        			+ "&password=" + password 
+        			+ "&outputFormat=" + format;
 
             // Create our JSON parser
             JavaScriptSerializer jsc = new JavaScriptSerializer();
             jsc.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() });
 
             // Download and parse the JSON into a dynamic object
-            dynamic result = jsc.Deserialize(new System.Net.WebClient().DownloadString(url), typeof(object)) as dynamic;
+            dynamic result = jsc.Deserialize(
+                new System.Net.WebClient().DownloadString(url), 
+                typeof(object)
+            ) as dynamic;
 
             // Print a nice informative string
             try
@@ -211,7 +209,11 @@ namespace Sample_CSharp_API_Client
                 }
                 else if (result is ArrayList && (result as ArrayList) is IDictionary<string, object>)
                 {
-                    result = new List<DynamicJsonObject>((result as ArrayList).ToArray().Select(x => new DynamicJsonObject(x as IDictionary<string, object>)));
+                    result = new List<DynamicJsonObject>(
+                        (result as ArrayList)
+                        .ToArray()
+                        .Select(x => new DynamicJsonObject(x as IDictionary<string, object>))
+                    );
                 }
                 else if (result is ArrayList)
                 {
@@ -229,7 +231,9 @@ namespace Sample_CSharp_API_Client
                     try
                     {
                         s = ((string)pair.Value).Replace("\n", "");
-                        s = pair.Key + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) + "\n";
+                        s = pair.Key 
+                            + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                            + "\n";
                         Console.Write(s);
                     }
                     catch (Exception e)
@@ -237,22 +241,37 @@ namespace Sample_CSharp_API_Client
                         s = pair.Key + ":\n";
                         Console.Write(s);
 
-                        foreach (var subpair in pair.Value as System.Collections.Generic.Dictionary<string, object>)
+                        foreach (
+                            var subpair 
+                            in pair.Value 
+                            as System.Collections.Generic.Dictionary<string, object>
+                        )
                         {
                             try
                             {
                                 s = ((string)subpair.Value).Replace("\n", "");
-                                s = "\t" + subpair.Key + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) + "\n";
+                                s = "\t" 
+                                    + subpair.Key 
+                                    + ": " 
+                                    + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                    + "\n";
                                 Console.Write(s);
                             }
                             catch (Exception e2)
                             {
                                 Console.Write("\t" + subpair.Key + ":\n");
 
-                                foreach (var subsubpair in subpair.Value as System.Collections.Generic.Dictionary<string, object>)
+                                foreach (
+                                    var subsubpair 
+                                    in subpair.Value 
+                                    as System.Collections.Generic.Dictionary<string, object>
+                                )
                                 {
                                     s = subsubpair.Value.ToString().Replace("\n", "");
-                                    s = "\t\t" + subsubpair.Key + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) + "\n";
+                                    s = "\t\t" 
+                                        + subsubpair.Key 
+                                        + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                        + "\n";
                                     Console.Write(s);
                                 }
                             }
@@ -264,7 +283,11 @@ namespace Sample_CSharp_API_Client
 
         public class DynamicJsonConverter : JavaScriptConverter
         {
-            public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
+            public override object Deserialize(
+                IDictionary<string, object> dictionary, 
+                Type type, 
+                JavaScriptSerializer serializer
+            )
             {
                 if (dictionary == null)
                     throw new ArgumentNullException("dictionary");
@@ -277,14 +300,22 @@ namespace Sample_CSharp_API_Client
                 return null;
             }
 
-            public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
+            public override IDictionary<string, object> Serialize(
+                object obj, 
+                JavaScriptSerializer serializer
+            )
             {
                 throw new NotImplementedException();
             }
 
             public override IEnumerable<Type> SupportedTypes
             {
-                get { return new System.Collections.ObjectModel.ReadOnlyCollection<Type>(new List<Type>(new Type[] { typeof(object) })); }
+                get { 
+                    return 
+                        new System.Collections.ObjectModel.ReadOnlyCollection<Type>(
+                            new List<Type>(new Type[] { typeof(object) })
+                        ); 
+                }
             }
         }
 
@@ -325,9 +356,6 @@ die "Could not get $base_url!" unless defined $json;
 # Decode the entire JSON
 my $decoded_json = decode_json($json);
 
-# Dump all data if need
-#print Dumper $decoded_json;
-
 # Print fetched attribute
 print "Domain Name: ", $decoded_json->{'WhoisRecord'}->{'domainName'}, "\n";
 print "Contact Email: ", $decoded_json->{'WhoisRecord'}->{'contactEmail'}, "\n";
@@ -339,9 +367,8 @@ print "Contact Email: ", $decoded_json->{'WhoisRecord'}->{'contactEmail'}, "\n";
 
 ```php
 <?php
-//////////////////////////
-// Fill in your details //
-//////////////////////////
+
+// Fill in your details
 $username = "YOUR_USERNAME";
 $password = "YOUR_PASSWORD";
 $domain = "google.com";
@@ -363,7 +390,7 @@ function RecursivePrettyPrint($obj)
   $str = "";
   foreach ((array)$obj as $key => $value)
   {
-    if (!is_string($key)) // XML parsing leaves a little to be desired as it fills our obj with key/values with just whitespace, ignore that whitespace at the cost of losing hostNames and ips in the final printed result
+    if (!is_string($key)) 
       continue;
     $str .= '<div style="margin-left: 25px;border-left:1px solid black">' . $key . ": ";
     if (is_string($value))
@@ -386,9 +413,7 @@ function RecursivePrettyPrint($obj)
 import urllib.request
 import json
 
-########################
-# Fill in your details #
-########################
+# Fill in your details
 username = "YOUR_USERNAME"
 password = "YOUR_PASSWORD"
 domain = "google.com"
@@ -445,9 +470,7 @@ require 'rexml/document'
 require 'rexml/xpath'
 require 'yaml'		# only needed to print the returned result in a very pretty way
 
-########################
-# Fill in your details #
-########################
+# Fill in your details
 username = "YOUR_USERNAME"
 password = "YOUR_PASSWORD"
 domain = "google.com"
