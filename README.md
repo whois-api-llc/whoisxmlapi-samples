@@ -232,7 +232,8 @@ namespace Sample_CSharp_API_Client
                     {
                         s = ((string)pair.Value).Replace("\n", "");
                         s = pair.Key 
-                            + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                            + ": " 
+			    + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
                             + "\n";
                         Console.Write(s);
                     }
@@ -270,7 +271,8 @@ namespace Sample_CSharp_API_Client
                                     s = subsubpair.Value.ToString().Replace("\n", "");
                                     s = "\t\t" 
                                         + subsubpair.Key 
-                                        + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                        + ": " 
+					+ s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
                                         + "\n";
                                     Console.Write(s);
                                 }
