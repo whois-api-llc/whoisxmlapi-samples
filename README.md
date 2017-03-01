@@ -1,8 +1,7 @@
-# whoisxmlapi-samples
+# Making a query to Whois API web service
 
-Samples of whoisxmlapi.com API for different languages.
-
-Here you may explore samples on folowing languages:
+Examples of using [www.whoisxmlapi.com](https://www.whoisxmlapi.com/) Hosted Whois Web Service RESTful API
+implemented in multiple languages:
 
 * [Java](#java)
 * [JS](#js)
@@ -34,9 +33,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-/**
- * @author jonz
- */
 public class SimpleQuery {
     public static void main(String[] args) {
         String API_URL = "http://www.whoisxmlapi.com/whoisserver/WhoisService";
@@ -53,13 +49,9 @@ public class SimpleQuery {
             HttpGet httpget = new HttpGet(url);
             System.out.println("executing request " + httpget.getURI());
 
-            // Create a response handler
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             String responseBody = httpclient.execute(httpget, responseHandler);
             System.out.println(responseBody);
-            System.out.println("----------------------------------------");
-
-            //parse
 
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
@@ -67,7 +59,10 @@ public class SimpleQuery {
             is.setCharacterStream(new StringReader(responseBody));
             Document doc = db.parse(is);
 
-            System.out.println("Root element " + doc.getDocumentElement().getNodeName());
+            System.out.println(
+				"Root element " 
+				+ doc.getDocumentElement().getNodeName()
+			);
 
         } catch (SAXException ex) {
             ex.printStackTrace();
@@ -92,48 +87,35 @@ public class SimpleQuery {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sample Javascript API Client</title>
+    <title>JQuery JSONP Sample</title>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript">
-        // Fill in your details
         var username = "YOUR_USERNAME";
         var password = "YOUR_PASSWORD";
         var domain = "google.com";
-        var format = "JSON";
-        var jsonCallback = "LoadJSON";
-        window.addEventListener("load", onPageLoad, false);
-        function onPageLoad() {
-            // Use a JSON resource
-            var url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" + domain + "&username=" + username + "&password=" + password + "&outputFormat=" + format;
-            // Dynamically Add a script to get our JSON data from a different server, avoiding cross origin problems
-            var head = document.getElementsByTagName('head')[0];
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = url + "&callback=" + jsonCallback;
-            head.appendChild(script);
-            // The function specified in jsonCallback will be called with a single argument representing the JSON object
-        }
-        // Do something with the json result we get back
-        function LoadJSON(result) {
-            // Print out a nice informative string
-            document.body.innerHTML += "<div>JSON:</div>" + RecursivePrettyPrint(result);
-        }
-        function RecursivePrettyPrint(obj) {
-            var str = "";
-            for (var x in obj) {
-                if (obj.hasOwnProperty(x)) {
-                    str += '<div style="margin-left: 25px;border-left:1px solid black">' + x + ": ";
-                    if (typeof(obj[x]) == "string")
-                        str += obj[x];
-                    else
-                        str += RecursivePrettyPrint(obj[x]);
-                    str += "</div>";
+        $(function () {
+            $.ajax({
+                url: "http://www.whoisxmlapi.com/whoisserver/WhoisService?callback=?",
+                dataType: "jsonp",
+                data: {
+                    username: username,
+                    password: password,
+                    domainName: domain,
+                    outputFormat: "json"
+                },
+                success: function (response) {
+                    $("#json").append("<div>JSON answer:</div>" + JSON.stringify(response, null, 2));
+                },
+                error: function(e){
+                    console.log(e);
                 }
-            }
-            return str;
-        }
+            });
+        });
     </script>
 </head>
 <body>
+<pre id="json"></pre>
 </body>
 </html>
 ```
@@ -141,6 +123,10 @@ public class SimpleQuery {
 ## dotNet
 
 [Browse all .Net samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/net)
+
+> Note that you need to make sure your Project is set to ".NET Framework 4" and NOT ".NET Framework 4 Client Profile"
+> Once that is set, make sure the following references are present under the References tree under the project:
+> Microsoft.CSharp, System, System.Web.Extensions, and System.XML
 
 
 ```c#
@@ -153,9 +139,6 @@ using System.Dynamic;
 using System.Collections;
 using System.Web.Script.Serialization;
 
-// Note that you need to make sure your Project is set to ".NET Framework 4" and NOT ".NET Framework 4 Client Profile"
-// Once that is set, make sure the following references are present under the References tree under the project:
-// Microsoft.CSharp, System, System.Web.Extensions, and System.XML
 
 namespace Sample_CSharp_API_Client
 {
@@ -174,7 +157,11 @@ namespace Sample_CSharp_API_Client
             // Use a JSON resource //
             /////////////////////////
             string format = "JSON";
-            string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" + domain + "&username=" + username + "&password=" + password + "&outputFormat=" + format;
+            string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" 
+						+ domain 
+						+ "&username=" + username 
+						+ "&password=" + password 
+						+ "&outputFormat=" + format;
 
             // Create our JSON parser
             JavaScriptSerializer jsc = new JavaScriptSerializer();
@@ -201,53 +188,10 @@ namespace Sample_CSharp_API_Client
                 }
             }
 
-            /////////////////////////
-            // Use an XML resource //
-            /////////////////////////
-            format = "XML";
-            url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" + domain + "&username=" + username + "&password=" + password + "&outputFormat=" + format;
-
-            var settings = new XmlReaderSettings();
-            var reader = XmlReader.Create(url, settings);
-            WhoisRecord record = new WhoisRecord();
-
-            try
-            {
-                var serializer = new System.Xml.Serialization.XmlSerializer(typeof(WhoisRecord));
-                record = (WhoisRecord)serializer.Deserialize(reader);
-
-                reader.Close();
-
-                // Print a nice informative string
-                Console.WriteLine("XML:");
-                record.PrintToConsole();
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    var serializer = new System.Xml.Serialization.XmlSerializer(typeof(ErrorMessage));
-                    ErrorMessage errorMessage = (ErrorMessage)serializer.Deserialize(reader);
-
-                    reader.Close();
-
-                    // Print a nice informative string
-                    Console.WriteLine("XML:\nErrorMessage:\n\t{0}", errorMessage.msg);
-                }
-                catch (Exception e2)
-                {
-                    Console.WriteLine("XML:\nException: {0}", e2.Message);
-                }
-            }
-
             // Prevent command window from automatically closing during debugging
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
-
-        //////////////////
-        // JSON Classes //
-        //////////////////
 
         public class DynamicJsonObject : DynamicObject
         {
@@ -345,260 +289,6 @@ namespace Sample_CSharp_API_Client
             }
         }
 
-        /////////////////
-        // XML Classes //
-        /////////////////
-
-        [Serializable()]
-        public class ErrorMessage
-        {
-            [System.Xml.Serialization.XmlElement("msg")]
-            public string msg { get; set; }
-        }
-
-        [Serializable()]
-        public class WhoisRecord
-        {
-            [System.Xml.Serialization.XmlElement("createdDate")]
-            public string createdDate { get; set; }
-            [System.Xml.Serialization.XmlElement("updatedDate")]
-            public string updatedDate { get; set; }
-            [System.Xml.Serialization.XmlElement("expiresDate")]
-            public string expiresDate { get; set; }
-            [System.Xml.Serialization.XmlElement("registrant")]
-            public WhoisRecordContact registrant { get; set; }
-            [System.Xml.Serialization.XmlElement("administrativeContact")]
-            public WhoisRecordContact administrativeContact { get; set; }
-            [System.Xml.Serialization.XmlElement("billingContact")]
-            public WhoisRecordContact billingContact { get; set; }
-            [System.Xml.Serialization.XmlElement("technicalContact")]
-            public WhoisRecordContact technicalContact { get; set; }
-            [System.Xml.Serialization.XmlElement("zoneContact")]
-            public WhoisRecordContact zoneContact { get; set; }
-            [System.Xml.Serialization.XmlElement("domainName")]
-            public string domainName { get; set; }
-            [System.Xml.Serialization.XmlElement("nameServers")]
-            public WhoisRecordNameServers nameServers { get; set; }
-            [System.Xml.Serialization.XmlElement("rawText")]
-            public string rawText { get; set; }
-            [System.Xml.Serialization.XmlElement("header")]
-            public string header { get; set; }
-            [System.Xml.Serialization.XmlElement("strippedText")]
-            public string strippedText { get; set; }
-            [System.Xml.Serialization.XmlElement("footer")]
-            public string footer { get; set; }
-            [System.Xml.Serialization.XmlElement("audit")]
-            public WhoisRecordAudit audit { get; set; }
-            [System.Xml.Serialization.XmlElement("registrarName")]
-            public string registrarName { get; set; }
-            [System.Xml.Serialization.XmlElement("registryData")]
-            public WhoisRecordRegistryData registryData { get; set; }
-            [System.Xml.Serialization.XmlElement("domainAvailability")]
-            public string domainAvailability { get; set; }
-            [System.Xml.Serialization.XmlElement("contactEmail")]
-            public string contactEmail { get; set; }
-            [System.Xml.Serialization.XmlElement("domainNameExt")]
-            public string domainNameExt { get; set; }
-
-            public void PrintToConsole()
-            {
-                Console.WriteLine("WhoisRecord:");
-                Console.WriteLine("\tcreatedDate: " + createdDate);
-                Console.WriteLine("\texpdatedDate: " + updatedDate);
-                Console.WriteLine("\texpiresDate: " + expiresDate);
-                Console.WriteLine("\tregistrant:");
-                registrant.PrintToConsole();
-                Console.WriteLine("\tadministrativeContact:");
-                administrativeContact.PrintToConsole();
-                Console.WriteLine("\tbillingContact:");
-                billingContact.PrintToConsole();
-                Console.WriteLine("\ttechnicalContact:");
-                technicalContact.PrintToConsole();
-                Console.WriteLine("\ttechnicalContact:");
-                technicalContact.PrintToConsole();
-                Console.WriteLine("\tzoneContact:");
-                zoneContact.PrintToConsole();
-                Console.WriteLine("\tdomainName: " + domainName);
-                Console.WriteLine("\tnameServers:");
-                nameServers.PrintToConsole();
-                Console.WriteLine("\trawText: " + rawText.Substring(0, rawText.Length < 40 ? rawText.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\theader: " + header.Substring(0, header.Length < 40 ? header.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\tstrippedText: " + strippedText.Substring(0, strippedText.Length < 40 ? strippedText.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\tfooter: " + footer.Substring(0, footer.Length < 40 ? footer.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\taudit:");
-                audit.PrintToConsole();
-                Console.WriteLine("\tregistrarName: " + registrarName);
-                Console.WriteLine("\tregistryData:");
-                registryData.PrintToConsole();
-                Console.WriteLine("\tdomainAvailability: " + domainAvailability);
-                Console.WriteLine("\tcontactEmail: " + contactEmail);
-                Console.WriteLine("\tdomainNameExt: " + domainNameExt);
-            }
-        }
-
-        [Serializable()]
-        public class WhoisRecordContact
-        {
-            [System.Xml.Serialization.XmlElement("name")]
-            public string name { get; set; }
-            [System.Xml.Serialization.XmlElement("organization")]
-            public string organization { get; set; }
-            [System.Xml.Serialization.XmlElement("street1")]
-            public string street1 { get; set; }
-            [System.Xml.Serialization.XmlElement("street2")]
-            public string street2 { get; set; }
-            [System.Xml.Serialization.XmlElement("city")]
-            public string city { get; set; }
-            [System.Xml.Serialization.XmlElement("state")]
-            public string state { get; set; }
-            [System.Xml.Serialization.XmlElement("postalCode")]
-            public string postalCode { get; set; }
-            [System.Xml.Serialization.XmlElement("country")]
-            public string country { get; set; }
-            [System.Xml.Serialization.XmlElement("email")]
-            public string email { get; set; }
-            [System.Xml.Serialization.XmlElement("telephone")]
-            public string telephone { get; set; }
-            [System.Xml.Serialization.XmlElement("rawText")]
-            public string rawText { get; set; }
-            [System.Xml.Serialization.XmlElement("unparsable")]
-            public string unparsable { get; set; }
-
-            public void PrintToConsole()
-            {
-                Console.WriteLine("\t\t\tname: " + name);
-                Console.WriteLine("\t\t\torganization: " + organization);
-                Console.WriteLine("\t\t\tstreet1: " + street1);
-                Console.WriteLine("\t\t\tstreet2: " + street2);
-                Console.WriteLine("\t\t\tcity: " + city);
-                Console.WriteLine("\t\t\tstate: " + state);
-                Console.WriteLine("\t\t\tpostalCode: " + postalCode);
-                Console.WriteLine("\t\t\tcountry: " + country);
-                Console.WriteLine("\t\t\temail: " + email);
-                Console.WriteLine("\t\t\ttelephone: " + telephone);
-                Console.WriteLine("\t\t\trawText: " + rawText);
-                Console.WriteLine("\t\t\tunparsable: " + unparsable);
-            }
-        }
-
-        [Serializable()]
-        public class WhoisRecordNameServers
-        {
-            [System.Xml.Serialization.XmlElement("rawText")]
-            public string rawText { get; set; }
-            [System.Xml.Serialization.XmlElement("Address")]
-            public List<string> hostNames { get; set; }
-            [System.Xml.Serialization.XmlElement("class")]
-            public List<string> ips { get; set; }
-
-            public void PrintToConsole()
-            {
-                Console.WriteLine("\t\trawText: " + rawText.Substring(0, (rawText.Length < 40 ? rawText.Length : 40)).Replace("\n", ""));
-                Console.WriteLine("\t\thostNames:");
-                foreach (string hostname in hostNames)
-                    Console.WriteLine("\t\t\t" + hostname);
-                Console.WriteLine("\t\tips:\n");
-                foreach (string ip in ips)
-                    Console.WriteLine("\t\t\t" + ip);
-            }
-        }
-
-        [Serializable()]
-        public class WhoisRecordAudit
-        {
-            [System.Xml.Serialization.XmlElement("createdDate")]
-            public string createdDate { get; set; }
-            [System.Xml.Serialization.XmlElement("updatedDate")]
-            public string updatedDate { get; set; }
-
-            public void PrintToConsole()
-            {
-                Console.WriteLine("\t\tcreatedDate: " + createdDate);
-                Console.WriteLine("\t\tupdatedDate: " + updatedDate);
-            }
-        }
-
-        [Serializable()]
-        public class WhoisRecordRegistryData
-        {
-            [System.Xml.Serialization.XmlElement("createdDate")]
-            public string createdDate { get; set; }
-            [System.Xml.Serialization.XmlElement("updatedDate")]
-            public string updatedDate { get; set; }
-            [System.Xml.Serialization.XmlElement("expiresDate")]
-            public string expiresDate { get; set; }
-            [System.Xml.Serialization.XmlElement("registrant")]
-            public WhoisRecordContact registrant { get; set; }
-            [System.Xml.Serialization.XmlElement("administrativeContact")]
-            public WhoisRecordContact administrativeContact { get; set; }
-            [System.Xml.Serialization.XmlElement("billingContact")]
-            public WhoisRecordContact billingContact { get; set; }
-            [System.Xml.Serialization.XmlElement("technicalContact")]
-            public WhoisRecordContact technicalContact { get; set; }
-            [System.Xml.Serialization.XmlElement("zoneContact")]
-            public WhoisRecordContact zoneContact { get; set; }
-            [System.Xml.Serialization.XmlElement("domainName")]
-            public string domainName { get; set; }
-            [System.Xml.Serialization.XmlElement("nameServers")]
-            public WhoisRecordNameServers nameServers { get; set; }
-            [System.Xml.Serialization.XmlElement("status")]
-            public string status { get; set; }
-            [System.Xml.Serialization.XmlElement("rawText")]
-            public string rawText { get; set; }
-            [System.Xml.Serialization.XmlElement("header")]
-            public string header { get; set; }
-            [System.Xml.Serialization.XmlElement("strippedText")]
-            public string strippedText { get; set; }
-            [System.Xml.Serialization.XmlElement("footer")]
-            public string footer { get; set; }
-            [System.Xml.Serialization.XmlElement("audit")]
-            public WhoisRecordAudit audit { get; set; }
-            [System.Xml.Serialization.XmlElement("registrarName")]
-            public string registrarName { get; set; }
-            [System.Xml.Serialization.XmlElement("whoisServer")]
-            public string whoisServer { get; set; }
-            [System.Xml.Serialization.XmlElement("referralURL")]
-            public string referralURL { get; set; }
-            [System.Xml.Serialization.XmlElement("createdDateNormalized")]
-            public string createdDateNormalized { get; set; }
-            [System.Xml.Serialization.XmlElement("updatedDateNormalized")]
-            public string updatedDateNormalized { get; set; }
-            [System.Xml.Serialization.XmlElement("expiresDateNormalized")]
-            public string expiresDateNormalized { get; set; }
-
-            public void PrintToConsole()
-            {
-                Console.WriteLine("\t\tcreatedDate: " + createdDate);
-                Console.WriteLine("\t\tupdatedDate: " + updatedDate);
-                Console.WriteLine("\t\texpiresDate: " + expiresDate);
-                Console.WriteLine("\t\tregistrant:");
-                registrant.PrintToConsole();
-                Console.WriteLine("\t\tadministrativeContact:");
-                administrativeContact.PrintToConsole();
-                Console.WriteLine("\t\tbillingContact:");
-                billingContact.PrintToConsole();
-                Console.WriteLine("\t\ttechnicalContact:");
-                technicalContact.PrintToConsole();
-                Console.WriteLine("\t\tzoneContact:");
-                zoneContact.PrintToConsole();
-                Console.WriteLine("\t\tdomainName: " + domainName);
-                Console.WriteLine("\t\tnameServers:");
-                nameServers.PrintToConsole();
-                Console.WriteLine("\t\tstatus: " + status.Substring(0, (status.Length < 40 ? status.Length : 40)).Replace("\n", ""));
-                Console.WriteLine("\t\trawText: " + rawText.Substring(0, (rawText.Length < 40 ? rawText.Length : 40)).Replace("\n", ""));
-                Console.WriteLine("\t\theader: " + header.Substring(0, (header.Length < 40 ? header.Length : 40)).Replace("\n", ""));
-                Console.WriteLine("\t\tstrippedText: " + strippedText.Substring(0, (strippedText.Length < 40 ? strippedText.Length : 40)).Replace("\n", ""));
-                Console.WriteLine("\t\tfooter: " + footer.Substring(0, (footer.Length < 40 ? footer.Length : 40)).Replace("\n", ""));
-                Console.WriteLine("\t\taudit:");
-                audit.PrintToConsole();
-                Console.WriteLine("\t\tregistrarName: " + registrarName);
-                Console.WriteLine("\t\twhoisServer: " + whoisServer);
-                Console.WriteLine("\t\treferralURL: " + referralURL);
-                Console.WriteLine("\t\tcreatedDateNormalized: " + createdDateNormalized);
-                Console.WriteLine("\t\tupdatedDateNormalized: " + updatedDateNormalized);
-                Console.WriteLine("\t\texpiresDateNormalized: " + expiresDateNormalized);
-            }
-        }
     }
 }
 ```
@@ -656,29 +346,19 @@ print "Contact Email: ", $decoded_json->{'WhoisRecord'}->{'contactEmail'}, "\n";
 $username = "YOUR_USERNAME";
 $password = "YOUR_PASSWORD";
 $domain = "google.com";
-$format = "JSON"; //or XML
-$url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName='. $domain .'&username='. $username .'&password='. $password .'&outputFormat='. $format;
-if($format=='JSON'){
-  /////////////////////////
-  // Use a JSON resource //
-  /////////////////////////
-  // Get and build the JSON object
-  $result = json_decode(file_get_contents($url));
-  // Print out a nice informative string
-  print ("<div>JSON:</div>" . RecursivePrettyPrint($result));
-}
-else{
-  ////////////////////////
-  // Use a XML resource //
-  ////////////////////////
-  $url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName='. $domain .'&username='. $username .'&password='. $password .'&outputFormat='. $format;
-  // Get and build the XML associative array
-  $parser = new XMLtoArray();
-  $result = array("WhoisRecord" =>$parser->ParseXML($url));
-  // Print out a nice informative string
-  print ("<div>XML:</div>" . RecursivePrettyPrint($result));
-}
-// Function to recursively print all properties of an object and their values
+$format = "JSON";
+
+$url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?' 
+	. 'domainName=' . $domain 
+	. '&username=' . $username 
+	. '&password='. $password 
+	. '&outputFormat='. $format;
+
+
+$result = json_decode(file_get_contents($url));
+print ("<div>JSON:</div>" . RecursivePrettyPrint($result));
+
+
 function RecursivePrettyPrint($obj)
 {
   $str = "";
@@ -696,73 +376,6 @@ function RecursivePrettyPrint($obj)
 
   return $str;
 }
-// Class that simply turns an xml tree into a multilevel associative array
-class XMLtoArray
-{
-  private $root;
-  private $stack;
-  public function __construct()
-  {
-    $this->root = null;
-    $this->stack = array();
-  }
-
-  function ParseXML($feed_url)
-  {
-    $xml_parser = xml_parser_create();
-
-    xml_parser_set_option($xml_parser, XML_OPTION_CASE_FOLDING, 0);// or throw new Exception('Unable to Set Case Folding option on XML Parser!');
-    xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, 1);// or throw new Exception('Unable to Set Skip Whitespace option on XML Parser!');
-    xml_set_object($xml_parser, $this);
-    xml_set_element_handler($xml_parser, "startElement", "endElement");
-    xml_set_character_data_handler($xml_parser, "characterData");
-    $fp = fopen($feed_url,"r");// or throw new Exception("Unable to read URL!");
-    while ($data = fread($fp, 4096))
-      xml_parse($xml_parser, $data, feof($fp));// or throw new Exception(sprintf("XML error: %s at line %d", xml_error_string(xml_get_error_code($xml_parser)), xml_get_current_line_number($xml_parser)));
-    fclose($fp);
-    xml_parser_free($xml_parser);
-
-    return $this->root;
-  }
-
-  public function startElement($parser, $tagName, $attrs)
-  {
-    if ($this->root == null)
-    {
-      $this->root = array();
-      $this->stack[] = &$this->root;
-    }
-    else
-    {
-      $parent = &$this->stack[count($this->stack)-1];
-      if (!is_array($parent))
-        $parent = array($parent);
-      if (isset($parent[$tagName]))
-      {
-        if (!is_array($parent[$tagName]))
-          $parent[$tagName] = array($parent[$tagName]);
-      }
-      else
-        $parent[$tagName] = null;
-
-      $this->stack[] = &$parent[$tagName];
-    }
-  }
-  public function endElement($parser, $tagName)
-  {
-    array_pop($this->stack);
-  }
-  public function characterData($parser, $data)
-  {
-    $data = trim($data);
-
-    $current = &$this->stack[count($this->stack)-1];
-    if (is_array($current))
-      $current[] = $data;
-    else
-      $current = $data;
-  }
-}
 ?>
 ```
 
@@ -773,7 +386,6 @@ class XMLtoArray
 ```python
 import urllib.request
 import json
-import xml.etree.ElementTree as etree
 
 ########################
 # Fill in your details #
@@ -793,16 +405,18 @@ def RecursivePrettyPrint(obj, indent):
         else:
             print (' '*indent + str(x)[0:50] + ": " + str(obj[x])[0:50].replace("\n",""))
 
-#######################
-# Use a JSON resource #
-#######################
 format = "JSON"
-url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
+url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
+	+ 'domainName=' + domain\
+	+ '&username=' + username\
+	+ '&password=' + password\
+	+ '&outputFormat=' + format
 
 # Get and build the JSON object
 result = json.loads(urllib.request.urlopen(url).readall().decode('utf8'))
 
-# Handle some odd JS cases for audit, whose properties are named '$' and '@class'.  Dispose of '@class' and just make '$' the value for each property
+# Handle some odd JS cases for audit, whose properties are named '$' and '@class'.  
+# Dispose of '@class' and just make '$' the value for each property
 if 'audit' in result:
 	if 'createdDate' in result['audit']:
 		if '$' in result['audit']['createdDate']:
@@ -818,39 +432,6 @@ if ('WhoisRecord' in result):
     createdDate = result['WhoisRecord']['createdDate']
 
 # Print out a nice informative string
-RecursivePrettyPrint(result, 0)
-
-#######################
-# Use an XML resource #
-#######################
-format = "XML"
-url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
-result = etree.parse(urllib.request.urlopen(url))
-root = result.getroot()
-
-# A function to recursively build a dict out of an ElementTree
-def etree_to_dict(t):
-    if (len(list(t)) == 0):
-        d = t.text
-    else:
-        d = {}
-        for node in list(t):
-            d[node.tag] = etree_to_dict(node)
-            if isinstance(d[node.tag], dict):
-                d[node.tag] = d[node.tag];
-    return d
-
-# Create the dict with the above function.
-result = {root.tag :etree_to_dict(root)}
-
-# Get a few data members.
-if ('WhoisRecord' in result):
-    registrantName = result['WhoisRecord']['registrant']['name']
-    domainName = result['WhoisRecord']['domainName']
-    createdDate = result['WhoisRecord']['createdDate']
-
-# Print out a nice informative string
-#print ("'" + registrantName + "' created " + domainName + " on " + createdDate)
 RecursivePrettyPrint(result, 0)
 ```
 
@@ -872,11 +453,12 @@ username = "YOUR_USERNAME"
 password = "YOUR_PASSWORD"
 domain = "google.com"
 
-#######################
-# Use a JSON resource #
-#######################
 format = "JSON"
-url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
+url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
+	+ 'domainName=' + domain\
+	+ '&username=' + username\
+	+ '&password=' + password\
+	+ '&outputFormat=' + format
 
 # Open the resource
 buffer = open(url).read
@@ -886,28 +468,4 @@ result = JSON.parse(buffer)
 
 # Print out a nice informative string
 puts "XML:\n" + result.to_yaml + "\n"
-
-#######################
-# Use an XML resource #
-#######################
-format = "XML"
-url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
-
-# Open the resource
-buffer = open(url).read
-
-# Parse the XML result
-result = REXML::Document.new(buffer)
-
-# Get a few data members and make sure they aren't nil
-if ((errorMessage = REXML::XPath.first(result, "/ErrorMessage/msg")) != nil)
-	puts "JSON:\nErrorMessage:\n\t" + errorMessage.text
-else
-	registrantName = (registrantName = REXML::XPath.first(result, "/WhoisRecord/registrant/name")) == nil ? '' : registrantName.text
-	domainName = (domainName = REXML::XPath.first(result, "/WhoisRecord/domainName")) == nil ? '' : domainName.text
-	createdDate = (createdDate = REXML::XPath.first(result, "WhoisRecord/createdDate")) == nil ? '' : createdDate.text
-
-	# Print out a nice informative string
-	puts "JSON:\n'" + registrantName + "' created " + domainName + " on " + createdDate
-end
 ```
