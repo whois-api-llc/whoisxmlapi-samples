@@ -60,9 +60,9 @@ public class SimpleQuery {
             Document doc = db.parse(is);
 
             System.out.println(
-				"Root element " 
-				+ doc.getDocumentElement().getNodeName()
-			);
+                "Root element " 
+                + doc.getDocumentElement().getNodeName()
+            );
 
         } catch (SAXException ex) {
             ex.printStackTrace();
@@ -152,10 +152,10 @@ namespace Sample_CSharp_API_Client
 
             string format = "JSON";
             string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" 
-        			+ domain 
-        			+ "&username=" + username 
-        			+ "&password=" + password 
-        			+ "&outputFormat=" + format;
+                    + domain 
+                    + "&username=" + username 
+                    + "&password=" + password 
+                    + "&outputFormat=" + format;
 
             // Create our JSON parser
             JavaScriptSerializer jsc = new JavaScriptSerializer();
@@ -233,7 +233,7 @@ namespace Sample_CSharp_API_Client
                         s = ((string)pair.Value).Replace("\n", "");
                         s = pair.Key 
                             + ": " 
-							+ s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                            + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
                             + "\n";
                         Console.Write(s);
                     }
@@ -254,7 +254,7 @@ namespace Sample_CSharp_API_Client
                                 s = "\t" 
                                     + subpair.Key 
                                     + ": " 
-									+ s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                    + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
                                     + "\n";
                                 Console.Write(s);
                             }
@@ -272,7 +272,7 @@ namespace Sample_CSharp_API_Client
                                     s = "\t\t" 
                                         + subsubpair.Key 
                                         + ": " 
-										+ s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                        + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
                                         + "\n";
                                     Console.Write(s);
                                 }
@@ -377,10 +377,10 @@ $domain = "google.com";
 $format = "JSON";
 
 $url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?' 
-	. 'domainName=' . $domain 
-	. '&username=' . $username 
-	. '&password='. $password 
-	. '&outputFormat='. $format;
+    . 'domainName=' . $domain 
+    . '&username=' . $username 
+    . '&password='. $password 
+    . '&outputFormat='. $format;
 
 
 $result = json_decode(file_get_contents($url));
@@ -433,10 +433,10 @@ def RecursivePrettyPrint(obj, indent):
 
 format = "JSON"
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
-	+ 'domainName=' + domain\
-	+ '&username=' + username\
-	+ '&password=' + password\
-	+ '&outputFormat=' + format
+    + 'domainName=' + domain\
+    + '&username=' + username\
+    + '&password=' + password\
+    + '&outputFormat=' + format
 
 # Get and build the JSON object
 result = json.loads(urllib.request.urlopen(url).readall().decode('utf8'))
@@ -444,12 +444,12 @@ result = json.loads(urllib.request.urlopen(url).readall().decode('utf8'))
 # Handle some odd JS cases for audit, whose properties are named '$' and '@class'.  
 # Dispose of '@class' and just make '$' the value for each property
 if 'audit' in result:
-	if 'createdDate' in result['audit']:
-		if '$' in result['audit']['createdDate']:
-			result['audit']['createdDate'] = js['audit']['createdDate']['$']
-	if 'updatedDate' in result['audit']:
-		if '$' in result['audit']['updatedDate']:
-			result['audit']['updatedDate'] = js['audit']['updatedDate']['$']
+    if 'createdDate' in result['audit']:
+        if '$' in result['audit']['createdDate']:
+            result['audit']['createdDate'] = js['audit']['createdDate']['$']
+    if 'updatedDate' in result['audit']:
+        if '$' in result['audit']['updatedDate']:
+            result['audit']['updatedDate'] = js['audit']['updatedDate']['$']
 
 # Get a few data members.
 if ('WhoisRecord' in result):
@@ -470,7 +470,7 @@ require 'open-uri'
 require 'json'
 require 'rexml/document'
 require 'rexml/xpath'
-require 'yaml'		# only needed to print the returned result in a very pretty way
+require 'yaml'      # only needed to print the returned result in a very pretty way
 
 # Fill in your details
 username = "YOUR_USERNAME"
@@ -479,10 +479,10 @@ domain = "google.com"
 
 format = "JSON"
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
-	+ 'domainName=' + domain\
-	+ '&username=' + username\
-	+ '&password=' + password\
-	+ '&outputFormat=' + format
+    + 'domainName=' + domain\
+    + '&username=' + username\
+    + '&password=' + password\
+    + '&outputFormat=' + format
 
 # Open the resource
 buffer = open(url).read
