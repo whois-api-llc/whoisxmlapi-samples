@@ -49,7 +49,8 @@ public class SimpleQuery {
             HttpGet httpget = new HttpGet(url);
             System.out.println("executing request " + httpget.getURI());
 
-            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            ResponseHandler<String> responseHandler = 
+					new BasicResponseHandler();
             String responseBody = httpclient.execute(httpget, responseHandler);
             System.out.println(responseBody);
 
@@ -89,14 +90,16 @@ public class SimpleQuery {
 <head>
     <title>JQuery JSONP Sample</title>
     <script
-        src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js">
+	</script>
     <script type="text/javascript">
         var username = "YOUR_USERNAME";
         var password = "YOUR_PASSWORD";
         var domain = "google.com";
         $(function () {
             $.ajax({
-                url: "http://www.whoisxmlapi.com/whoisserver/WhoisService?callback=?",
+                url: "http://www.whoisxmlapi.com/whoisserver/WhoisService"
+				+ "?callback=?",
                 dataType: "jsonp",
                 data: {
                     username: username,
@@ -105,7 +108,8 @@ public class SimpleQuery {
                     outputFormat: "json"
                 },
                 success: function (response) {
-                    $("#json").append("<div>JSON answer:</div>" + JSON.stringify(response, null, 2));
+                    $("#json").append("<div>JSON answer:</div>" 
+					+ JSON.stringify(response, null, 2));
                 },
                 error: function(e){
                     console.log(e);
@@ -151,7 +155,8 @@ namespace Sample_CSharp_API_Client
             string domain = "google.com";
 
             string format = "JSON";
-            string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=" 
+            string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?" 
+                    + "domainName=" 
                     + domain 
                     + "&username=" + username 
                     + "&password=" + password 
@@ -159,7 +164,11 @@ namespace Sample_CSharp_API_Client
 
             // Create our JSON parser
             JavaScriptSerializer jsc = new JavaScriptSerializer();
-            jsc.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() });
+            jsc.RegisterConverters(
+                new JavaScriptConverter[] {
+                    new DynamicJsonConverter() 
+                }
+            );
 
             // Download and parse the JSON into a dynamic object
             dynamic result = jsc.Deserialize(
@@ -177,7 +186,10 @@ namespace Sample_CSharp_API_Client
             {
                 try
                 {
-                    Console.WriteLine("JSON:\nErrorMessage:\n\t{0}", result.ErrorMessage.msg);
+                    Console.WriteLine(
+                        "JSON:\nErrorMessage:\n\t{0}",
+                        result.ErrorMessage.msg
+                    );
                 }
                 catch (Exception e2)
                 {
@@ -185,7 +197,6 @@ namespace Sample_CSharp_API_Client
                 }
             }
 
-            // Prevent command window from automatically closing during debugging
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
         }
@@ -199,20 +210,30 @@ namespace Sample_CSharp_API_Client
                 this.Dictionary = dictionary;
             }
 
-            public override bool TryGetMember(GetMemberBinder binder, out object result)
+            public override bool TryGetMember(
+                GetMemberBinder binder, 
+                out object result
+            )
             {
                 result = this.Dictionary[binder.Name];
 
                 if (result is IDictionary<string, object>)
                 {
-                    result = new DynamicJsonObject(result as IDictionary<string, object>);
+                    result = new DynamicJsonObject(
+                        result as IDictionary<string, object>
+                    );
                 }
-                else if (result is ArrayList && (result as ArrayList) is IDictionary<string, object>)
+                else if (
+                    result is ArrayList 
+                    && 
+                    (result as ArrayList) is IDictionary<string, object>)
                 {
                     result = new List<DynamicJsonObject>(
                         (result as ArrayList)
                         .ToArray()
-                        .Select(x => new DynamicJsonObject(x as IDictionary<string, object>))
+                        .Select(x => new DynamicJsonObject(
+                            x as IDictionary<string, object>)
+                        )
                     );
                 }
                 else if (result is ArrayList)
@@ -245,7 +266,8 @@ namespace Sample_CSharp_API_Client
                         foreach (
                             var subpair 
                             in pair.Value 
-                            as System.Collections.Generic.Dictionary<string, object>
+                            as System.Collections.Generic.
+                                Dictionary<string, object>
                         )
                         {
                             try
@@ -254,7 +276,10 @@ namespace Sample_CSharp_API_Client
                                 s = "\t" 
                                     + subpair.Key 
                                     + ": " 
-                                    + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                    + s.Substring(
+                                        0, 
+                                        (s.Length < 40 ? s.Length : 40)
+                                    ) 
                                     + "\n";
                                 Console.Write(s);
                             }
@@ -265,14 +290,19 @@ namespace Sample_CSharp_API_Client
                                 foreach (
                                     var subsubpair 
                                     in subpair.Value 
-                                    as System.Collections.Generic.Dictionary<string, object>
+                                    as System.Collections.Generic.
+                                        Dictionary<string, object>
                                 )
                                 {
-                                    s = subsubpair.Value.ToString().Replace("\n", "");
+                                    s = subsubpair.Value.ToString()
+                                        .Replace("\n", "");
                                     s = "\t\t" 
                                         + subsubpair.Key 
                                         + ": " 
-                                        + s.Substring(0, (s.Length < 40 ? s.Length : 40)) 
+                                        + s.Substring(
+                                            0, 
+                                            (s.Length < 40 ? s.Length : 40)
+                                        ) 
                                         + "\n";
                                     Console.Write(s);
                                 }
@@ -314,8 +344,9 @@ namespace Sample_CSharp_API_Client
             {
                 get { 
                     return 
-                        new System.Collections.ObjectModel.ReadOnlyCollection<Type>(
-                            new List<Type>(new Type[] { typeof(object) })
+                        new System.Collections.ObjectModel.
+                            ReadOnlyCollection<Type>(
+                                new List<Type>(new Type[] { typeof(object) })
                         ); 
                 }
             }
@@ -360,7 +391,9 @@ my $decoded_json = decode_json($json);
 
 # Print fetched attribute
 print "Domain Name: ", $decoded_json->{'WhoisRecord'}->{'domainName'}, "\n";
-print "Contact Email: ", $decoded_json->{'WhoisRecord'}->{'contactEmail'}, "\n";
+print "Contact Email: ",
+    $decoded_json->{'WhoisRecord'}->{'contactEmail'},
+    "\n";
 ```
 
 ## PHP
@@ -394,7 +427,9 @@ function RecursivePrettyPrint($obj)
   {
     if (!is_string($key)) 
       continue;
-    $str .= '<div style="margin-left: 25px;border-left:1px solid black">' . $key . ": ";
+    $str .= '<div style="margin-left: 25px;border-left:1px solid black">' 
+        . $key 
+        . ": ";
     if (is_string($value))
       $str .= $value;
     else
@@ -429,7 +464,8 @@ def RecursivePrettyPrint(obj, indent):
         elif isinstance(obj[x], list):
             print(' '*indent + str(x)[0:50] + ": " + str(list(obj[x])))
         else:
-            print (' '*indent + str(x)[0:50] + ": " + str(obj[x])[0:50].replace("\n",""))
+            print (' '*indent + str(x)[0:50] + ": " + str(obj[x])[0:50]\
+                .replace("\n",""))
 
 format = "JSON"
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
@@ -441,7 +477,8 @@ url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
 # Get and build the JSON object
 result = json.loads(urllib.request.urlopen(url).readall().decode('utf8'))
 
-# Handle some odd JS cases for audit, whose properties are named '$' and '@class'.  
+# Handle some odd JS cases for audit, 
+# whose properties are named '$' and '@class'.  
 # Dispose of '@class' and just make '$' the value for each property
 if 'audit' in result:
     if 'createdDate' in result['audit']:
@@ -470,7 +507,7 @@ require 'open-uri'
 require 'json'
 require 'rexml/document'
 require 'rexml/xpath'
-require 'yaml'      # only needed to print the returned result in a very pretty way
+require 'yaml'      # only needed to print the returned result in a pretty way
 
 # Fill in your details
 username = "YOUR_USERNAME"
