@@ -99,7 +99,7 @@ public class SimpleQuery {
         $(function () {
             $.ajax({
                 url: "http://www.whoisxmlapi.com/whoisserver/WhoisService"
-				+ "?callback=?",
+                    + "?callback=?",
                 dataType: "jsonp",
                 data: {
                     username: username,
