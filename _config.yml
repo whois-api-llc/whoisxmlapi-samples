@@ -1,1 +1,13 @@
+gems:
+    - jekyll-seo-tag
+author: whoisxmlapi
+description: Code samples of making requests to www.whoisxmlapi.com services
+logo: https://static.whoisxmlapi.com/images/logo.png
+social:
+    name: Whois API, LLC
+    links:
+        - https://twitter.com/whoisxmlapi
+        - https://www.facebook.com/pages/Whois-API-LLC/106782642810963
+        - https://www.linkedin.com/in/whois-api-6b257388
+        - https://plus.google.com/110739836659192632708
 theme: jekyll-theme-cayman
