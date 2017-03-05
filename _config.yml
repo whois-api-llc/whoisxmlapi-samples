@@ -3,6 +3,8 @@ gems:
 author: whoisxmlapi
 description: Code samples of making requests to www.whoisxmlapi.com services
 logo: https://static.whoisxmlapi.com/images/logo.png
+repository: whois-api-llc/whoisxmlapi-samples
+show_downloads: true
 social:
     name: Whois API, LLC
     links:
