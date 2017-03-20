@@ -361,7 +361,7 @@ namespace Sample_CSharp_API_Client
 
 [Browse all NodeJS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/blob/master/nodejs/sample.js)
 
-```node
+```JavaScript
 var https = require('https');
 var querystring = require('querystring');
 
