@@ -1,7 +1,8 @@
 var https = require('https');
 var querystring = require('querystring');
 
-var url = "https://www.whoisxmlapi.com/whoisserver/WhoisService?";
+var url = "https://www.whoisxmlapi.com/"
+    +"whoisserver/WhoisService?";
 
 var parameters = {
     domainName: 'google.com',
