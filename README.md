@@ -9,6 +9,7 @@ implemented in multiple languages:
 * [NodeJs](#nodejs)
 * [Perl](#perl)
 * [PHP](#php)
+* [PowerShell](#powershell)
 * [Python](#python)
 * [Ruby](#ruby)
 
@@ -359,9 +360,9 @@ namespace Sample_CSharp_API_Client
 
 ## NodeJS
 
-[Browse all NodeJS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/blob/master/nodejs/sample.js)
+[Browse all NodeJS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/nodejs)
 
-```JavaScript
+```js
 var https = require('https');
 var querystring = require('querystring');
 
@@ -394,7 +395,18 @@ https.get(url, function (res) {
     res.on('end', function () {
         try {
             var parsedData = JSON.stringify(rawData);
-            console.log(parsedData);
+            if (parsedData.WhoisRecord) {
+                console.log(
+                    'Domain name: '
+                    + parsedData.WhoisRecord.domainName
+                );
+                console.log(
+                    'Contact email: '
+                    + parsedData.WhoisRecord.contactEmail
+                );
+            } else {
+                console.log(parsedData);
+            }
         } catch (e) {
             console.log(e.message);
         }
@@ -489,6 +501,26 @@ function RecursivePrettyPrint($obj)
 ?>
 ```
 
+## PowerShell
+
+[Browse all PowerShell samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/powershell)
+
+```posh
+$uri = "https://www.whoisxmlapi.com/whoisserver/"`
+       +"WhoisService?domainName=google.com"`
+       +"&username=xxxx&password=xxxxxxx"`
+       +"&outputFormat=json"
+
+$j = Invoke-WebRequest -Uri $uri -UseBasicParsing  | `
+ ConvertFrom-Json
+
+if ([bool]($j.PSObject.Properties.name -match "WhoisRecord")) {
+    echo "Domain Name: $($j.WhoisRecord.domainName)"
+    echo "Contact Email: $($j.WhoisRecord.contactEmail)"
+} else {
+    echo $j
+}
+```
 ## Python
 
 [Browse all Python samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/python)
