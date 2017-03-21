@@ -29,8 +29,19 @@ https.get(url, function (res) {
     });
     res.on('end', function () {
         try {
-            var parsedData = JSON.stringify(rawData);
-            console.log(parsedData);
+            var parsedData = JSON.parse(rawData);
+            if (parsedData.WhoisRecord) {
+                console.log(
+                    'Domain name: '
+                    + parsedData.WhoisRecord.domainName
+                );
+                console.log(
+                    'Contact email: '
+                    + parsedData.WhoisRecord.contactEmail
+                );
+            } else {
+                console.log(parsedData);
+            }
         } catch (e) {
             console.log(e.message);
         }
