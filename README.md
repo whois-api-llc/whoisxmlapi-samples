@@ -3,6 +3,7 @@
 Examples of using [www.whoisxmlapi.com](https://www.whoisxmlapi.com/) Hosted Whois Web Service RESTful API
 implemented in multiple languages:
 
+
 * [Java](#java)
 * [JS](#js)
 * [dotNet](#dotnet)
@@ -14,7 +15,10 @@ implemented in multiple languages:
 * [Ruby](#ruby)
 
 
+
 ## Java
+
+### Access by password
 
 [Browse all Java samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/java)
 
@@ -80,6 +84,142 @@ public class SimpleQuery {
     }
 }
 ```
+
+### Access by API key
+
+```java
+package com.whoisxmlapi.test;
+
+import java.net.URLEncoder;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class ApiKeyClientTest {
+    
+    
+	public static void main(String[]args) {
+	    new ApiKeyClientTest().getSimpleDomainUsingApiKey();
+	}
+
+	private void getSimpleDomainUsingApiKey() {
+        String domainName = "test.com";
+        
+        String username = "username";
+        String apiKey = "apiKey";
+        String secretKey = "secretKey";
+        
+        getDomainNameUsingApiKey(domainName, username, apiKey, secretKey);
+    }
+
+    private String executeURL(String url) {
+        HttpClient c = new HttpClient();
+        System.out.println(url);
+        HttpMethod m = new GetMethod(url);
+        String res = null;
+        try {
+            c.executeMethod(m);
+            res = new String(m.getResponseBody());
+        } catch (Exception e) {
+            System.err.println("Cannot get url: " + e.toString());
+        } finally {
+            m.releaseConnection();
+        }
+        return res;
+	}
+	
+    public void getDomainNameUsingApiKey(
+        String domainName, 
+        String username, 
+        String apiKey, 
+        String secretKey
+    ) {
+        String apiKeyAuthenticationRequest = 
+            generateApiKeyAuthenticationRequest(username, apiKey, secretKey);
+        if (apiKeyAuthenticationRequest == null) {
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://www.whoisxmlapi.com/whoisserver/WhoisService?");
+        sb.append(apiKeyAuthenticationRequest);
+        sb.append("&domainName=");
+        sb.append(domainName);
+        
+        String url = sb.toString();
+        
+        String result = executeURL(url);
+        if (result != null) {
+            System.out.println("Result: " + result);
+        }
+    }
+
+	private String generateApiKeyAuthenticationRequest(
+	    String username, 
+	    String apiKey, 
+	    String secretKey
+	    ) {
+         try {
+            long timestamp = System.currentTimeMillis();
+            
+            String request = generateRequest(username, timestamp);
+            String digest = generateDigest(username, apiKey, secretKey, timestamp);
+            
+            String requestURL = URLEncoder.encode(request, "UTF-8");
+            String digestURL = URLEncoder.encode(digest, "UTF-8");
+            
+            String apiKeyAuthenticationRequest = "requestObject="+requestURL+"&digest="+digestURL;
+            return apiKeyAuthenticationRequest;
+         } catch (Exception e) {
+             System.err.println("An error occurred: " + e.toString());
+         }
+         return null;
+    }
+
+    private String generateRequest(
+        String username, 
+        long timestamp
+    ) throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("u", username);
+        json.put("t", timestamp);
+        String jsonStr = json.toString();
+        byte[] json64 = Base64.encodeBase64(jsonStr.getBytes());
+        String json64Str = new String(json64);
+        return json64Str;
+    }
+
+    private String generateDigest(
+        String username, 
+        String apiKey, 
+        String secretKey, 
+        long timestamp
+    ) throws Exception {
+        StringBuilder sb = new StringBuilder();
+        sb.append(username);
+        sb.append(timestamp);
+        sb.append(apiKey);
+        
+        SecretKeySpec secretKeySpec = 
+            new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacMD5");
+        Mac mac = Mac.getInstance(secretKeySpec.getAlgorithm());
+        mac.init(secretKeySpec);
+        
+        byte[] digestBytes = mac.doFinal(sb.toString().getBytes("UTF-8"));
+        String digest = new String(Hex.encodeHex(digestBytes));
+        return digest;
+    }
+}
+```
+
 
 ## JS
 
