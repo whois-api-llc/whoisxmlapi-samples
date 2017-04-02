@@ -90,132 +90,83 @@ public class SimpleQuery {
 ```java
 package com.whoisxmlapi.test;
 
-import java.net.URLEncoder;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class ApiKeyClientTest {
-    
-    
-	public static void main(String[]args) {
-	    new ApiKeyClientTest().getSimpleDomainUsingApiKey();
-	}
 
-	private void getSimpleDomainUsingApiKey() {
-        String domainName = "test.com";
-        
-        String username = "username";
-        String apiKey = "apiKey";
-        String secretKey = "secretKey";
-        
-        getDomainNameUsingApiKey(domainName, username, apiKey, secretKey);
+    public static void main(String[]args) {
+        new ApiKeyClientTest().getWhois("test.com", "user","key","secretKey");
     }
 
-    private String executeURL(String url) {
-        HttpClient c = new HttpClient();
-        System.out.println(url);
-        HttpMethod m = new GetMethod(url);
-        String res = null;
-        try {
-            c.executeMethod(m);
-            res = new String(m.getResponseBody());
-        } catch (Exception e) {
-            System.err.println("Cannot get url: " + e.toString());
-        } finally {
-            m.releaseConnection();
-        }
-        return res;
-	}
-	
-    public void getDomainNameUsingApiKey(
-        String domainName, 
-        String username, 
-        String apiKey, 
-        String secretKey
-    ) {
-        String apiKeyAuthenticationRequest = 
-            generateApiKeyAuthenticationRequest(username, apiKey, secretKey);
-        if (apiKeyAuthenticationRequest == null) {
-            return;
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("http://www.whoisxmlapi.com/whoisserver/WhoisService?");
-        sb.append(apiKeyAuthenticationRequest);
-        sb.append("&domainName=");
-        sb.append(domainName);
-        
-        String url = sb.toString();
-        
-        String result = executeURL(url);
-        if (result != null) {
-            System.out.println("Result: " + result);
-        }
+    public void getWhois(String domain,String user,String key,String secret) {
+        String err = "Request timeout";
+        String res = getData(domain, user, key, secret);
+
+        res = (res.indexOf(err)<0) ? res : getData(domain, user, key, secret);
+
+        System.out.println((res == null) ? "" : res);
     }
 
-	private String generateApiKeyAuthenticationRequest(
-	    String username, 
-	    String apiKey, 
-	    String secretKey
-	    ) {
+    private String getData(String domain,String user,String key,String secret)
+    {
+        String request = generateAuthRequest(user, key, secret);
+        String url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?";
+        url = (request==null) ? null : url + request +"&domainName=" + domain;
+
+        return (url != null) ? executeURL(url) : null;
+    }
+
+    private String generateAuthRequest(String user,String key,String secret) {
+        long timestamp = System.currentTimeMillis();
+        String result = null;
+
          try {
-            long timestamp = System.currentTimeMillis();
-            
-            String request = generateRequest(username, timestamp);
-            String digest = generateDigest(username, apiKey, secretKey, timestamp);
-            
-            String requestURL = URLEncoder.encode(request, "UTF-8");
-            String digestURL = URLEncoder.encode(digest, "UTF-8");
-            
-            String apiKeyAuthenticationRequest = "requestObject="+requestURL+"&digest="+digestURL;
-            return apiKeyAuthenticationRequest;
+            result = "requestObject=" + generateRequest(user, timestamp)
+                   + "&digest=" + generateMac(user, key, secret, timestamp);
          } catch (Exception e) {
              System.err.println("An error occurred: " + e.toString());
          }
-         return null;
+
+         return result;
     }
 
-    private String generateRequest(
-        String username, 
-        long timestamp
-    ) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put("u", username);
-        json.put("t", timestamp);
-        String jsonStr = json.toString();
-        byte[] json64 = Base64.encodeBase64(jsonStr.getBytes());
-        String json64Str = new String(json64);
-        return json64Str;
+    private String generateMac(String user,String key,String secret,long time)
+    throws Exception {
+        String algo = "HmacMD5";
+        String data = user + time + key;
+        SecretKeySpec spec = new SecretKeySpec(secret.getBytes("UTF-8"),algo);
+        Mac mac = Mac.getInstance(spec.getAlgorithm());
+        mac.init(spec);
+
+        return new String(Hex.encodeHex(mac.doFinal(data.getBytes("UTF-8"))));
     }
 
-    private String generateDigest(
-        String username, 
-        String apiKey, 
-        String secretKey, 
-        long timestamp
-    ) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        sb.append(username);
-        sb.append(timestamp);
-        sb.append(apiKey);
-        
-        SecretKeySpec secretKeySpec = 
-            new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacMD5");
-        Mac mac = Mac.getInstance(secretKeySpec.getAlgorithm());
-        mac.init(secretKeySpec);
-        
-        byte[] digestBytes = mac.doFinal(sb.toString().getBytes("UTF-8"));
-        String digest = new String(Hex.encodeHex(digestBytes));
-        return digest;
+    private String generateRequest(String username, long timestamp) {
+        String json = "{\"t\":" + timestamp + ",\"u\":\"" + username + "\"}";
+
+        return new String(new Base64(true).encodeBase64(json.getBytes()));
+    }
+
+    private String executeURL(String url) {
+        HttpMethod httpMethod = new GetMethod(url);
+        String res = null;
+
+        try {
+            new HttpClient().executeMethod(httpMethod);
+            res = new String(httpMethod.getResponseBody());
+        } catch (Exception e) {
+            System.err.println("Cannot get url: " + e.toString());
+        } finally {
+            httpMethod.releaseConnection();
+        }
+
+        return res;
     }
 }
 ```
