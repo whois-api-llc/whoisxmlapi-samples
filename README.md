@@ -100,7 +100,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 
 public class ApiKeyClientTest {
 
-    public static void main(String[]args) {
+    public static void main(String[] args) {
         new ApiKeyClientTest().getWhois("test.com", "user","key","secretKey");
     }
 
