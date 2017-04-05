@@ -1,6 +1,11 @@
 use strict;
 use warnings;
 use Data::Dumper;
+use LWP::Simple;                            # From CPAN
+use JSON qw( decode_json encode_json );     # From CPAN
+use Time::HiRes qw( time );                 # From CPAN
+use Digest::HMAC_MD5 qw( hmac_md5_hex );    # From CPAN
+use URI::Escape;                            # From CPAN
 use MIME::Base64 qw( encode_base64 );
 
 my @domains = (
