@@ -20,7 +20,7 @@ implemented in multiple languages:
 
 ### Access by password
 
-[Browse all Java samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/java)
+[Browse all Java samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/java)
 
 ```java
 package com.whoisxmlapi;
@@ -174,7 +174,7 @@ public class ApiKeyClientTest {
 
 ## JS
 
-[Browse all JS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/js)
+[Browse all JS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/js)
 
 
 ```html
@@ -219,7 +219,7 @@ public class ApiKeyClientTest {
 
 ## dotNet
 
-[Browse all .Net samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/net)
+[Browse all .Net samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/net)
 
 > Note that you need to make sure your Project is set to ".NET Framework 4" and NOT ".NET Framework 4 Client Profile".
 > Once that is set, make sure the following references are present under the References tree under the project: Microsoft.CSharp, System, System.Web.Extensions, and System.XML
@@ -451,7 +451,7 @@ namespace Sample_CSharp_API_Client
 
 ## NodeJS
 
-[Browse all NodeJS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/nodejs)
+[Browse all NodeJS samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/nodejs)
 
 ```js
 var https = require('https');
@@ -508,7 +508,7 @@ https.get(url, function (res) {
 ```
 ## Perl
 
-[Browse all Perl samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/perl)
+[Browse all Perl samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/perl)
 
 
 ```perl
@@ -548,7 +548,7 @@ print "Contact Email: ",
 
 ## PHP
 
-[Browse all PHP samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/php)
+[Browse all PHP samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/php)
 
 ```php
 <?php
@@ -594,7 +594,7 @@ function RecursivePrettyPrint($obj)
 
 ## PowerShell
 
-[Browse all PowerShell samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/powershell)
+[Browse all PowerShell samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/powershell)
 
 ```posh
 $uri = "https://www.whoisxmlapi.com/whoisserver/"`
@@ -614,7 +614,7 @@ if ([bool]($j.PSObject.Properties.name -match "WhoisRecord")) {
 ```
 ## Python
 
-[Browse all Python samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/python)
+[Browse all Python samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/python)
 
 ```python
 import urllib.request
@@ -670,7 +670,7 @@ RecursivePrettyPrint(result, 0)
 
 ## Ruby
 
-[Browse all Ruby samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/ruby)
+[Browse all Ruby samples](https://github.com/whois-api-llc/whoisxmlapi-samples/tree/master/password/ruby)
 
 ```ruby
 require 'open-uri'
