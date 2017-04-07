@@ -37,14 +37,12 @@ namespace ApiKeyAuthTest
                 "whoisxmlapi.com",
                 "twitter.com"
             };
-            bool reuseDigest = true;
-
             this.PerformRequest(username, apiKey, secretKey, 
-                url, domains, reuseDigest);
+                url, domains);
         }
 
         protected void PerformRequest(string username, string apiKey, 
-            string secretKey, string url, string[] domains, bool reuseDigest)
+            string secretKey, string url, string[] domains)
         {
             long timestamp = this.GetTimeStamp();
             string digest = this.GenerateDigest(
@@ -55,13 +53,6 @@ namespace ApiKeyAuthTest
             {
                 try
                 {
-                    if (!reuseDigest)
-                    {
-                        timestamp = this.GetTimeStamp();
-                        digest = this.GenerateDigest(
-                            username, apiKey, secretKey, timestamp
-                        );
-                    }
                     string request = this.BuildRequest(
                         username, timestamp, digest, domain
                     );

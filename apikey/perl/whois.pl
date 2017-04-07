@@ -18,16 +18,11 @@ my $url = 'https://whoisxmlapi.com/whoisserver/WhoisService?';
 my $username = 'username';
 my $apiKey = 'api_key';
 my $secret = 'secret_key';
-my $reuseDigest = 0;
-my $timestamp = int((time * 1000 + 0.5));
 
+my $timestamp = int((time * 1000 + 0.5));
 my $digest = generateDigest($username, $timestamp, $apiKey, $secret);
 
 foreach my $domain (@domains){
-    if (!$reuseDigest){
-        $timestamp = int((time * 1000 + 0.5));
-        $digest = generateDigest($username, $timestamp, $apiKey, $secret);
-    }
     my $requstString = buildRequest(
         $username,
         $timestamp,
@@ -65,7 +60,7 @@ sub buildRequest{
         'u' => $username,
         't' => $timestamp
     );
-    my $requestJson = encode_json(%request);
+    my $requestJson = encode_json(\%request);
     my $requestBase64 = encode_base64($requestJson);
     $requestString .= uri_escape($requestBase64);
     $requestString .= '&digest=';

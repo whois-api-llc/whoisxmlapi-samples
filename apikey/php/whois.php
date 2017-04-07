@@ -2,32 +2,40 @@
 $username = 'username';
 $apiKey = 'api_key';
 $secret = 'secret_key';
-$reuseDigest = false;
 $url = 'https://whoisxmlapi.com/whoisserver/WhoisService?';
-$timestamp = round(microtime(true) * 1000);
+$timestamp = null;
 $domains = array(
     'google.com',
     'example.com',
     'whoisxmlapi.com',
     'twitter.com',
 );
+$digest = null;
 
-$digest = generateDigest($username, $timestamp, $apiKey, $secret);
+generateParameters($timestamp, $digest, $username, $apiKey, $secret);
+
 foreach ($domains as $domain) {
-    if (!$reuseDigest) {
-        $timestamp = round(microtime(true) * 1000);
-        $digest = generateDigest($username, $timestamp, $apiKey, $secret);
-    }
-    $requestString = buildRequest($username, $timestamp, $digest, $domain);
-    $response = file_get_contents($url . $requestString);
+    $response = request($url, $username, $timestamp, $digest, $domain);
     if (strpos($response, 'Request timeout') !== false) {
-        $timestamp = round(microtime(true) * 1000);
-        $digest = generateDigest($username, $timestamp, $apiKey, $secret);
-        $requestString = buildRequest($username, $timestamp, $digest, $domain);
-        $response = file_get_contents($url . $requestString);
+        generateParameters($timestamp, $digest, $username, $apiKey, $secret);
+        $response = request($url, $username, $timestamp, $digest, $domain);
     }
     printResponse($response);
     echo '----------------------------' . "\n";
+}
+
+function generateParameters(
+    &$timestamp, &$digest, $username, $apiKey, $secret
+)
+{
+    $timestamp = round(microtime(true) * 1000);
+    $digest = generateDigest($username, $timestamp, $apiKey, $secret);
+}
+
+function request($url, $username, $timestamp, $digest, $domain)
+{
+    $requestString = buildRequest($username, $timestamp, $digest, $domain);
+    return file_get_contents($url . $requestString);
 }
 
 function printResponse($response)

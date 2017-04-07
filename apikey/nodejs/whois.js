@@ -44,7 +44,6 @@ function getWhois(username, apiKey, secretKey, domain)
     }).on('error', function(e) {
         console.log("Error: " + e.message);
     });
-
 }
 
 function generateDigest(username, timestamp, apiKey, secretKey) {

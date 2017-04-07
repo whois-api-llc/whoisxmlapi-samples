@@ -15,14 +15,18 @@ domains = [
     'twitter.com'
 ]
 url = 'https://whoisxmlapi.com/whoisserver/WhoisService?'
-reuseDigest = True
-timestamp = int(round(time.time() * 1000))
+timestamp = nil
+digest = nil
 
 def generateDigest(username, timestamp, apikey, secret):
     digest = username + str(timestamp) + apikey
     hash = hmac.new(secret, digest, hashlib.md5)
     return urllib.quote(str(hash.hexdigest()))
 
+def generateParameters(username, apikey, secret):
+    timestamp = int(round(time.time() * 1000))
+    digest = generateDigest(username, timestamp, apikey, secret)
+    return timestamp, digest
 
 def buildRequest(username, timestamp, digest, domain):
     requestString = "requestObject="
@@ -37,7 +41,6 @@ def buildRequest(username, timestamp, digest, domain):
     requestString += "&outputFormat=json"
     return requestString
 
-
 def printResponse(response):
     responseJson = json.loads(response)
     if 'WhoisRecord' in responseJson:
@@ -51,18 +54,17 @@ def printResponse(response):
             print "Expires date: "
             print responseJson['WhoisRecord']['expiresDate']
 
-digest = generateDigest(username, timestamp, apiKey, secret)
-
-for domain in domains:
-    if not reuseDigest:
-        timestamp = int(round(time.time() * 1000))
-        digest = generateDigest(username, timestamp, apiKey, secret)
+def request(url, username, timestamp, digest, domain):
     request = buildRequest(username, timestamp, digest, domain)
     response = urllib.urlopen(url + request).read().decode('utf8')
+    return response
+
+timestamp, digest = generateParameters(username, apiKey, secret)
+
+for domain in domains:
+    response = request(url, username, timestamp, digest, domain)
     if "Request timeout" in response:
-        timestamp = int(round(time.time() * 1000))
-        digest = generateDigest(username, timestamp, apiKey, secret)
-        request = buildRequest(username, timestamp, digest, domain)
-    response = urllib.urlopen(url + request).read().decode('utf8')
+        timestamp, digest = generateParameters(username, apiKey, secret)
+        response = request(url, username, timestamp, digest, domain)
     printResponse(response)
     print "---------------------------\n"

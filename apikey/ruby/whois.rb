@@ -17,8 +17,6 @@ url = 'https://whoisxmlapi.com/whoisserver/WhoisService?'
 username = 'username'
 api_key = 'api_key'
 secret = 'secret_key'
-reuse_digest = true
-timestamp = (Time.now.to_f * 1000).to_i
 
 def generate_digest(username, timestamp, api_key, secret)
     digest = username + timestamp.to_s + api_key
@@ -41,7 +39,7 @@ def build_request(username, timestamp, digest, domain)
 end
 
 def print_response(response)
-    response_string = JSON.parse(response)
+    response_hash = JSON.parse(response)
     if response_hash.key? "WhoisRecord"
         if response_hash["WhoisRecord"].key? "contactEmail"
             puts "Contact Email: "
@@ -61,13 +59,10 @@ def print_response(response)
     end
 end
 
+timestamp = (Time.now.to_f * 1000).to_i
 digest = generate_digest(username, timestamp, api_key, secret)
 
 domains.each do |domain|
-    if reuse_digest == false
-        timestamp = (Time.now.to_f * 1000).to_i
-        digest = generate_digest(username, timestamp, api_key, secret)
-    end
     request_string = build_request(username, timestamp, digest, domain)
     response = open(url + request_string).read
     if response.include? "Request timeout"
