@@ -75,8 +75,8 @@ function buildRequest($username, $timestamp, $digest, $domain)
     $requestString .= urlencode($requestBase64);
     $requestString .= '&digest=';
     $requestString .= $digest;
-    $requestString .= '&domainName='
-        . $domain
-        . '&outputFormat=json';
+    $requestString .= '&domainName=';
+    $requestString .= $domain;
+    $requestString .= '&outputFormat=json';
     return $requestString;
 }
