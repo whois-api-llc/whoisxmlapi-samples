@@ -2,6 +2,11 @@
 ---
 
 @import "{{ site.theme }}";
+@import "bootstrap/mixins/clearfix";
+@import "bootstrap/mixins/nav-divider";
+@import "bootstrap/mixins/border-radius";
+@import "bootstrap/variables";
+@import "bootstrap/navs";
 
 .page-header {
   background-color: #f00000 !important;
