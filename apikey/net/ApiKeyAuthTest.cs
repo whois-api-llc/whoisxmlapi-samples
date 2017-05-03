@@ -175,9 +175,9 @@ namespace ApiKeyAuthTest
 
         protected long GetTimeStamp()
         {
-            return (long)(DateTime.Now.Subtract(
+            return (long)(DateTime.UtcNow.Subtract(
                 new DateTime(1970, 1, 1)
-            ).TotalMilliseconds * 1000);
+            ).TotalMilliseconds);
         }
     }
 
