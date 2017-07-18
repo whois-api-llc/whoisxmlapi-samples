@@ -20,8 +20,8 @@ namespace Sample_CSharp_API_Client
             //////////////////////////
             // Fill in your details //
             //////////////////////////
-            string username = "YOUR_USERNAME";
-            string password = "YOUR_PASSWORD";
+            string username = "username";
+            string password = "xxxxxxxxxx";
             string domain = "google.com";
 
             /////////////////////////
@@ -152,7 +152,10 @@ namespace Sample_CSharp_API_Client
                         {
                             try
                             {
-                                s = ((string)subpair.Value).Replace("\n", "");
+                                string valType = subpair.Value.GetType().ToString();
+                                s = valType.Equals("System.Int32")
+                                        ? subpair.Value.ToString()
+                                        : ((string)subpair.Value).Replace("\n", "");
                                 s = "\t" + subpair.Key + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) + "\n";
                                 Console.Write(s);
                             }
@@ -160,11 +163,22 @@ namespace Sample_CSharp_API_Client
                             {
                                 Console.Write("\t" + subpair.Key + ":\n");
 
-                                foreach (var subsubpair in subpair.Value as System.Collections.Generic.Dictionary<string, object>)
+                                try
                                 {
-                                    s = subsubpair.Value.ToString().Replace("\n", "");
-                                    s = "\t\t" + subsubpair.Key + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) + "\n";
-                                    Console.Write(s);
+                                    foreach (var subsubpair in subpair.Value as System.Collections.Generic.Dictionary<string, object>)
+                                    {
+                                        s = subsubpair.Value.ToString().Replace("\n", "");
+                                        if (subsubpair.Value.GetType().ToString().Equals("System.Collections.ArrayList")) {
+                                            foreach (var value in (ArrayList)subsubpair.Value)
+                                                Console.Write("\t\t" + value.ToString() + "\n");
+                                            continue;
+                                        }
+                                        s = "\t\t" + subsubpair.Key + ": " + s.Substring(0, (s.Length < 40 ? s.Length : 40)) + "\n";
+                                        Console.Write(s);
+                                    }
+                                }
+                                catch (Exception e3) {
+                                    Console.Write(subpair.Value + "\n");
                                 }
                             }
                         }
@@ -258,32 +272,36 @@ namespace Sample_CSharp_API_Client
             {
                 Console.WriteLine("WhoisRecord:");
                 Console.WriteLine("\tcreatedDate: " + createdDate);
-                Console.WriteLine("\texpdatedDate: " + updatedDate);
+                Console.WriteLine("\tupdatedDate: " + updatedDate);
                 Console.WriteLine("\texpiresDate: " + expiresDate);
                 Console.WriteLine("\tregistrant:");
-                registrant.PrintToConsole();
+                registrant?.PrintToConsole();
                 Console.WriteLine("\tadministrativeContact:");
-                administrativeContact.PrintToConsole();
+                administrativeContact?.PrintToConsole();
                 Console.WriteLine("\tbillingContact:");
-                billingContact.PrintToConsole();
+                billingContact?.PrintToConsole();
                 Console.WriteLine("\ttechnicalContact:");
-                technicalContact.PrintToConsole();
+                technicalContact?.PrintToConsole();
                 Console.WriteLine("\ttechnicalContact:");
-                technicalContact.PrintToConsole();
+                technicalContact?.PrintToConsole();
                 Console.WriteLine("\tzoneContact:");
-                zoneContact.PrintToConsole();
+                zoneContact?.PrintToConsole();
                 Console.WriteLine("\tdomainName: " + domainName);
                 Console.WriteLine("\tnameServers:");
-                nameServers.PrintToConsole();
-                Console.WriteLine("\trawText: " + rawText.Substring(0, rawText.Length < 40 ? rawText.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\theader: " + header.Substring(0, header.Length < 40 ? header.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\tstrippedText: " + strippedText.Substring(0, strippedText.Length < 40 ? strippedText.Length : 40).Replace("\n", ""));
-                Console.WriteLine("\tfooter: " + footer.Substring(0, footer.Length < 40 ? footer.Length : 40).Replace("\n", ""));
+                nameServers?.PrintToConsole();
+                string str = rawText ?? "";
+                Console.WriteLine("\trawText: " + str.Substring(0, str.Length < 40 ? str.Length : 40).Replace("\n", ""));
+                str = header ?? "";
+                Console.WriteLine("\theader: " + str.Substring(0, str.Length < 40 ? str.Length : 40).Replace("\n", ""));
+                str = strippedText ?? "";
+                Console.WriteLine("\tstrippedText: " + str.Substring(0, str.Length < 40 ? str.Length : 40).Replace("\n", ""));
+                str = footer ?? "";
+                Console.WriteLine("\tfooter: " + str.Substring(0, str.Length < 40 ? str.Length : 40).Replace("\n", ""));
                 Console.WriteLine("\taudit:");
-                audit.PrintToConsole();
+                audit?.PrintToConsole();
                 Console.WriteLine("\tregistrarName: " + registrarName);
                 Console.WriteLine("\tregistryData:");
-                registryData.PrintToConsole();
+                registryData?.PrintToConsole();
                 Console.WriteLine("\tdomainAvailability: " + domainAvailability);
                 Console.WriteLine("\tcontactEmail: " + contactEmail);
                 Console.WriteLine("\tdomainNameExt: " + domainNameExt);
@@ -340,21 +358,31 @@ namespace Sample_CSharp_API_Client
         {
             [System.Xml.Serialization.XmlElement("rawText")]
             public string rawText { get; set; }
-            [System.Xml.Serialization.XmlElement("Address")]
-            public List<string> hostNames { get; set; }
-            [System.Xml.Serialization.XmlElement("class")]
-            public List<string> ips { get; set; }
+            [System.Xml.Serialization.XmlElement("hostNames")]
+            public WhoisHosts hostNames { get; set; }
+            [System.Xml.Serialization.XmlElement("ips")]
+            public WhoisHosts ips { get; set; }
 
             public void PrintToConsole()
             {
-                Console.WriteLine("\t\trawText: " + rawText.Substring(0, (rawText.Length < 40 ? rawText.Length : 40)).Replace("\n", ""));
+                string str = rawText ?? "";
+                Console.WriteLine("\t\trawText: " + str.Substring(0, (str.Length < 40 ? str.Length : 40)).Replace("\n", ""));
+
                 Console.WriteLine("\t\thostNames:");
-                foreach (string hostname in hostNames)
+                foreach (string hostname in hostNames?.Items)
                     Console.WriteLine("\t\t\t" + hostname);
+
                 Console.WriteLine("\t\tips:\n");
-                foreach (string ip in ips)
+                foreach (string ip in ips?.Items)
                     Console.WriteLine("\t\t\t" + ip);
             }
+        }
+
+        [Serializable()]
+        public class WhoisHosts
+        {
+            [System.Xml.Serialization.XmlElement("Address")]
+            public List<string> Items { get; set; }
         }
 
         [Serializable()]
@@ -426,25 +454,25 @@ namespace Sample_CSharp_API_Client
                 Console.WriteLine("\t\tupdatedDate: " + updatedDate);
                 Console.WriteLine("\t\texpiresDate: " + expiresDate);
                 Console.WriteLine("\t\tregistrant:");
-                registrant.PrintToConsole();
+                registrant?.PrintToConsole();
                 Console.WriteLine("\t\tadministrativeContact:");
-                administrativeContact.PrintToConsole();
+                administrativeContact?.PrintToConsole();
                 Console.WriteLine("\t\tbillingContact:");
-                billingContact.PrintToConsole();
+                billingContact?.PrintToConsole();
                 Console.WriteLine("\t\ttechnicalContact:");
-                technicalContact.PrintToConsole();
+                technicalContact?.PrintToConsole();
                 Console.WriteLine("\t\tzoneContact:");
-                zoneContact.PrintToConsole();
+                zoneContact?.PrintToConsole();
                 Console.WriteLine("\t\tdomainName: " + domainName);
                 Console.WriteLine("\t\tnameServers:");
-                nameServers.PrintToConsole();
+                nameServers?.PrintToConsole();
                 Console.WriteLine("\t\tstatus: " + status.Substring(0, (status.Length < 40 ? status.Length : 40)).Replace("\n", ""));
                 Console.WriteLine("\t\trawText: " + rawText.Substring(0, (rawText.Length < 40 ? rawText.Length : 40)).Replace("\n", ""));
                 Console.WriteLine("\t\theader: " + header.Substring(0, (header.Length < 40 ? header.Length : 40)).Replace("\n", ""));
                 Console.WriteLine("\t\tstrippedText: " + strippedText.Substring(0, (strippedText.Length < 40 ? strippedText.Length : 40)).Replace("\n", ""));
                 Console.WriteLine("\t\tfooter: " + footer.Substring(0, (footer.Length < 40 ? footer.Length : 40)).Replace("\n", ""));
                 Console.WriteLine("\t\taudit:");
-                audit.PrintToConsole();            
+                audit?.PrintToConsole();            
                 Console.WriteLine("\t\tregistrarName: " + registrarName);
                 Console.WriteLine("\t\twhoisServer: " + whoisServer);
                 Console.WriteLine("\t\treferralURL: " + referralURL);
