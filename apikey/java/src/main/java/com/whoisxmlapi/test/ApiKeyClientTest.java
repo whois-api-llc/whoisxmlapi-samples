@@ -23,7 +23,6 @@ public class ApiKeyClientTest {
     
 	public static void main(String[]args) {
 	    new ApiKeyClientTest().getSimpleDomainUsingApiKey();
-	    
 	}
 
 	private void getSimpleDomainUsingApiKey() {
