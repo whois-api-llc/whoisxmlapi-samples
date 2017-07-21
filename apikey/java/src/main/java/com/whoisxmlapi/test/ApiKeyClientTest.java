@@ -1,5 +1,7 @@
 package com.whoisxmlapi.test;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +42,16 @@ public class ApiKeyClientTest {
         String res = null;
         try {
             c.executeMethod(m);
-            res = new String(m.getResponseBody());
+                        
+            BufferedReader reader = new BufferedReader(new InputStreamReader(m.getResponseBodyAsStream()));  
+            StringBuffer stringBuffer = new StringBuffer();  
+            String str = "";  
+            while((str = reader.readLine())!=null){  
+               stringBuffer.append(str + "\n");  
+            }  
+            res = stringBuffer.toString();  
+            
+            //res = new String(m.getResponseBody());
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Cannot get url", e);
         } finally {
