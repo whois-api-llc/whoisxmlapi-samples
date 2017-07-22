@@ -1,4 +1,7 @@
-package com.whoisxmlapi.test;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,20 +21,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ApiKeyClientTest {
-    
-    private Logger logger = Logger.getLogger(ApiKeyClientTest.class.getName());
-    
-	public static void main(String[]args) {
-	    new ApiKeyClientTest().getSimpleDomainUsingApiKey();
-	}
 
-	private void getSimpleDomainUsingApiKey() {
+    private Logger logger = Logger.getLogger(ApiKeyClientTest.class.getName());
+
+    public static void main(String[]args) {
+        new ApiKeyClientTest().getSimpleDomainUsingApiKey();
+    }
+
+    private void getSimpleDomainUsingApiKey() {
         String domainName = "test.com";
-        
+
         String username = "username";
         String apiKey = "apiKey";
         String secretKey = "secretKey";
-        
+
         getDomainNameUsingApiKey(domainName, username, apiKey, secretKey);
     }
 
@@ -42,60 +45,59 @@ public class ApiKeyClientTest {
         String res = null;
         try {
             c.executeMethod(m);
-                        
-            BufferedReader reader = new BufferedReader(new InputStreamReader(m.getResponseBodyAsStream()));  
-            StringBuffer stringBuffer = new StringBuffer();  
-            String str = "";  
-            while((str = reader.readLine())!=null){  
-               stringBuffer.append(str + "\n");  
-            }  
-            res = stringBuffer.toString();  
-            
-            //res = new String(m.getResponseBody());
+            BufferedReader reader =
+                new BufferedReader(
+                        new InputStreamReader(m.getResponseBodyAsStream()));
+        StringBuffer stringBuffer = new StringBuffer();
+        String str = "";
+        while((str = reader.readLine())!=null){
+            stringBuffer.append(str + "\n");
+        }
+        res = stringBuffer.toString();
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Cannot get url", e);
         } finally {
             m.releaseConnection();
         }
         return res;
-	}
-	
+    }
+
     public void getDomainNameUsingApiKey(String domainName, String username, String apiKey, String secretKey) {
         String apiKeyAuthenticationRequest = generateApiKeyAuthenticationRequest(username, apiKey, secretKey);
         if (apiKeyAuthenticationRequest == null) {
             return;
         }
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append("http://www.whoisxmlapi.com/whoisserver/WhoisService?");
         sb.append(apiKeyAuthenticationRequest);
         sb.append("&domainName=");
         sb.append(domainName);
-        
+
         String url = sb.toString();
-        
+
         String result = executeURL(url);
         if (result != null) {
             logger.log(Level.INFO, "result: " + result);
         }
     }
 
-	private String generateApiKeyAuthenticationRequest(String username, String apiKey, String secretKey) {
-         try {
+    private String generateApiKeyAuthenticationRequest(String username, String apiKey, String secretKey) {
+        try {
             long timestamp = System.currentTimeMillis();
-            
+
             String request = generateRequest(username, timestamp);
             String digest = generateDigest(username, apiKey, secretKey, timestamp);
-            
+
             String requestURL = URLEncoder.encode(request, "UTF-8");
             String digestURL = URLEncoder.encode(digest, "UTF-8");
-            
+
             String apiKeyAuthenticationRequest = "requestObject="+requestURL+"&digest="+digestURL;
             return apiKeyAuthenticationRequest;
-         } catch (Exception e) {
-             logger.log(Level.SEVERE, "an error occurred", e);
-         }
-         return null;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "an error occurred", e);
+        }
+        return null;
     }
 
     private String generateRequest(String username, long timestamp) throws JSONException {
@@ -113,11 +115,11 @@ public class ApiKeyClientTest {
         sb.append(username);
         sb.append(timestamp);
         sb.append(apiKey);
-        
+
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacMD5");
         Mac mac = Mac.getInstance(secretKeySpec.getAlgorithm());
         mac.init(secretKeySpec);
-        
+
         byte[] digestBytes = mac.doFinal(sb.toString().getBytes("UTF-8"));
         String digest = new String(Hex.encodeHex(digestBytes));
         return digest;

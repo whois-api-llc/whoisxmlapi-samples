@@ -1,4 +1,9 @@
-import urllib.request
+try:
+    # For Python v.3 and later
+    from urllib.request import urlopen
+except ImportError:
+    # For Python v.2
+    from urllib2 import urlopen
 import json
 import xml.etree.ElementTree as etree
 
@@ -24,10 +29,10 @@ def RecursivePrettyPrint(obj, indent):
 # Use a JSON resource #
 #######################
 format = "JSON"
-url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
+url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
 
 # Get and build the JSON object
-result = json.loads(urllib.request.urlopen(url).readall().decode('utf8'))
+result = json.loads(urlopen(url).read().decode('utf8'))
 
 # Handle some odd JS cases for audit, whose properties are named '$' and '@class'.  Dispose of '@class' and just make '$' the value for each property
 if 'audit' in result:
@@ -52,7 +57,7 @@ RecursivePrettyPrint(result, 0)
 #######################
 format = "XML"
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?domainName=' + domain + '&username=' + username + '&password=' + password + '&outputFormat=' + format
-result = etree.parse(urllib.request.urlopen(url))
+result = etree.parse(urlopen(url))
 root = result.getroot()
 
 # A function to recursively build a dict out of an ElementTree
