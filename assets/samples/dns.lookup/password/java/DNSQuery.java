@@ -1,4 +1,3 @@
-
 public class DNSQuery {
         public static void main(String[]args){
             String API_URL = 
@@ -18,8 +17,4 @@ public class DNSQuery {
                 ex.printStackTrace();
             }
         }
-
 }
-
-
-

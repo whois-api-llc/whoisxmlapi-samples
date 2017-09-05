@@ -1,7 +1,4 @@
-#######################
-# Use a JSON resource #
-#######################
-$uri = "https://www.whoisxmlapi.com/reverse-whoi-api/"`
+$uri = "https://www.whoisxmlapi.com/reverse-whois-api/"`
         +"search.php?mode=preview"`
         +"&term1=wikimedia"`
         +"&username=your_whois_api_username&password=your_whois_api_password"`

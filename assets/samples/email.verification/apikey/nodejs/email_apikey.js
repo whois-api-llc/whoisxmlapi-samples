@@ -20,4 +20,3 @@ http.get(url, function(response) {
     response.on('data', function(chunk) { str += chunk; });
     response.on('end', function() { console.log(str); });
 }).end();
-

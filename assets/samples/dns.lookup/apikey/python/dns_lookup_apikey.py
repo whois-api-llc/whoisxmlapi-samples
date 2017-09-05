@@ -29,4 +29,3 @@ url = url + digest + "&domainName=" + domain
 url = url + "&type=_all"
 
 print(urlopen(url).read().decode('utf8'))
-

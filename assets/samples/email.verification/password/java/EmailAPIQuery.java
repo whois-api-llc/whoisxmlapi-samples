@@ -1,4 +1,3 @@
-
 public class EmailAPIQuery {
         public static void main(String[]args){
             String API_URL = 
@@ -21,7 +20,4 @@ public class EmailAPIQuery {
                 ex.printStackTrace();
             }
         }
-
 }
-
-

@@ -29,4 +29,3 @@ url = url + digest + "&emailAddress=" + email
 url = url + "&checkCatchAll=1"
 
 print(urlopen(url).read().decode('utf8'))
-

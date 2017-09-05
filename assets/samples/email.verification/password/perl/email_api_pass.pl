@@ -2,9 +2,9 @@
 
 use LWP::Simple;                # From CPAN
 use JSON qw( decode_json );     # From CPAN
-use Data::Dumper;               # Perl core module
-use strict;                     # Good practice
-use warnings;                   # Good practice
+use Data::Dumper;
+use strict;
+use warnings;
 
 my $user_name = "your whois api username";
 my $password = "your whois api password";
@@ -19,5 +19,3 @@ my $url = "$base_url?emailAddress=$emailAddress&validateDNS=$validateDNS"
     . "&checkFree=checkFree&checkDisposable=checkDisposable" 
     . "&outputFormat=json&userName=$user_name&password=$password";
 getprint($url);
-
-

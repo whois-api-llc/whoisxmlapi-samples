@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 use Digest::HMAC_MD5 qw( hmac_md5_hex );
 use LWP::Simple;
 use MIME::Base64 qw( encode_base64 );

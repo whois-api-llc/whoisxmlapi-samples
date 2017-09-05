@@ -17,11 +17,6 @@ url = 'https://www.whoisxmlapi.com/brand-alert-api/search.php?' +
     '&exclude_term1=' + exclude_term1
     '&exclude_term2=' + exclude_term2
 
-# Open the resource
 buffer = open(url).read
-
-# Parse the JSON result
 result = JSON.parse(buffer)
-
-# Print out a nice informative string
 puts "JSON:\n" + result.to_yaml + "\n"

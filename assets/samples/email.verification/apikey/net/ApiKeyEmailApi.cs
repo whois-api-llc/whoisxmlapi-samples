@@ -37,4 +37,3 @@ class Program {
         Console.WriteLine(whoisData);
     }
 }
-

@@ -2,9 +2,9 @@
 
 use LWP::Simple;                # From CPAN, also install LWP::Protocol::Https
 use JSON qw( decode_json );     # From CPAN
-use Data::Dumper;               # Perl core module
-use strict;                     # Good practice
-use warnings;                   # Good practice
+use Data::Dumper;
+use strict;
+use warnings;
 
 my $base_url = "https://www.whoisxmlapi.com/whoisserver/DNSService";
 my $type = "_all";

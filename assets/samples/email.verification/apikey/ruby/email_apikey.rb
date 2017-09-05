@@ -17,4 +17,3 @@ url = 'http://www.whoisxmlapi.com/whoisserver/EmailVerifyService?'\
     + '&checkCatchAll=1'
 
 puts open(url).read
-

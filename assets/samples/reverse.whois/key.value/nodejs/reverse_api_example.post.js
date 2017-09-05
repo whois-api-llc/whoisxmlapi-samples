@@ -6,7 +6,7 @@ var options = {
   "port": 443,
   "path": "/reverse-whois-api/search.php",
   "headers": {
-    "cache-control": "no-cache",
+    "cache-control": "no-cache"
   }
 };
 

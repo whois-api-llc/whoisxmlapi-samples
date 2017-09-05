@@ -1,13 +1,5 @@
-########################
-# Fill in your details #
-########################
-
 $username = "your whois api username"
 $password = "your whois api password"
-
-#######################
-# Use a JSON resource #
-#######################
 
 $postParams = @{
         terms = @(
@@ -29,6 +21,3 @@ $uri = 'https://www.whoisxmlapi.com/reverse-whois-api/search.php'
 $response = Invoke-WebRequest -Uri $uri -Method POST -Body $postParams -ContentType "application/json"
 
 echo $response.content | convertfrom-json | convertto-json -depth 10
-
-
-

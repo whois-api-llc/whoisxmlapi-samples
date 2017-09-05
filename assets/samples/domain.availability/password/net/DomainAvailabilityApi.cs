@@ -20,7 +20,6 @@ class Program {
         using (StreamReader reader = new StreamReader(stream)) {
             whoisData = reader.ReadToEnd();
         }
-
         Console.WriteLine(whoisData);
     }
 }

@@ -12,8 +12,8 @@ var url = 'https://www.whoisxmlapi.com/brand-alert-api/search.php?' +
     '&username=' + username +
     '&password=' + password +
     '&output_format=' + format +
-    '&exclude_term1=' + exclude_term1
-    '&exclude_term2=' + exclude_term2
+    '&exclude_term1=' + exclude_term1 +
+    '&exclude_term2=' + exclude_term2;
 
 http.get(url, function(response) {
     var str = '';

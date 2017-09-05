@@ -3,8 +3,8 @@
 use LWP::Simple;                # From CPAN and install LWP::Protocol::Https
 use JSON qw( decode_json );     # From CPAN
 use Data::Dumper;               # Perl core module
-use strict;                     # Good practice
-use warnings;                   # Good practice
+use strict;
+use warnings;
 
 my $base_url = "https://www.whoisxmlapi.com/brand-alert-api/search.php";
 my $term1 = "whois";
@@ -20,6 +20,5 @@ sub getDnsData {
     my $url = "$base_url?username=$user_name&password=$password&term1="
         . "$term1&exclude_term1=$exclude_term1&exclude_term2=" 
         . "$exclude_term2&output_format=$format";
-
     return get($url);
 }

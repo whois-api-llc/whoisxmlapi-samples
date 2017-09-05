@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-use strict;                     # Good practice
-use warnings;                   # Good practice
+use strict;
+use warnings;
 
 use LWP::UserAgent;             # From CPAN
 
