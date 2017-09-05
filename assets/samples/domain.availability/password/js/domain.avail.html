@@ -1,0 +1,19 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    var domain = "example.com";
+    var password = "your whois api password";
+    var username = "your whois api username";
+
+    $(function () {
+        $.ajax({
+            url: "http://www.whoisxmlapi.com/whoisserver/WhoisService",
+            dataType: "jsonp",
+            data: {domainName: domain, username: username,
+                   password: password, outputFormat: "JSON",
+                   cmd: "GET_DN_AVAILABILITY"},
+            success: function(data) {
+                $("body").append("<pre>"+ JSON.stringify(data,"",2)+"</pre>");
+            }
+        });
+    });
+</script>

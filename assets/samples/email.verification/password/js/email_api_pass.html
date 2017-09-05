@@ -1,0 +1,23 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    var email = "support@whoisxmlapi.com";
+    var password = "your whois api password";
+    var username = "your whois api username";
+    var dns = "true", smtp = "true", catchAll = "true";
+    var free = "true", disposable = "true";
+    $(function () {
+        $.ajax({
+            url: "http://www.whoisxmlapi.com/whoisserver/EmailVerifyService",
+            dataType: "jsonp",
+            data: {emailAddress: email, username: username,
+                   password: password, outputFormat: "JSON",
+                   validateDNS: dns, validateSMTP: smtp,
+                   checkCatchAll: catchAll, checkFree: free,
+                   checkDisposable: disposable},
+            success: function(data) {
+                $("body").append("<pre>"+ JSON.stringify(data,"",2)+"</pre>");
+            }
+        });
+    });
+</script>
+

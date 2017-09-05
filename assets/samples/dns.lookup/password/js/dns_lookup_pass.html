@@ -1,0 +1,22 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+//     Fill in your details
+    var username = "Your whois api username";
+    var password = "Your whois api password";
+    var domain = "google.com";
+    var format = "JSON";
+
+    window.addEventListener("load", onPageLoad, false);
+
+    function onPageLoad() {
+        $.ajax({
+            url: "http://www.whoisxmlapi.com/whoisserver/DNSService",
+            dataType: "jsonp",
+            data: {type: "_all", domainName: domain, username: username,
+                password: password, outputFormat: format},
+            success: function(data) {
+                $("body").append("<pre>"+ JSON.stringify(data,"",2)+"</pre>");
+            }
+        });
+    }
+</script>

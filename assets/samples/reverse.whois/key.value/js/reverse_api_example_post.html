@@ -1,0 +1,22 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+var settings = {
+  "async": true,
+  "crossDomain": true,
+  "url": "https://www.whoisxmlapi.com/reverse-whois-api/search.php",
+  "method": "POST",
+  "headers": {
+    "cache-control": "no-cache",
+  },
+  "data": "{\"terms\": [{\"section\": \"Registrant\", \"attribute\":"
+  + " \"Email\",\"value\": \"support@whoisxmlapi.com\", \"matchType\":" 
+  + " \"exact\", \"exclude\": \"false\"}], \"recordsCounter\": \"false\","
+  + " \"outputFormat\": \"json\", \"username\": \"your whois api username\","
+  + " \"password\": \"your whois api password\",\"rows\": \"10\", "
+  + "\"searchType\": \"current\"}"
+};
+
+$.ajax(settings).done(function (response) {
+  console.log(response);
+});
+</script>

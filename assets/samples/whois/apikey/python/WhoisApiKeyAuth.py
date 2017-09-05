@@ -14,10 +14,17 @@ secret = 'your whois api secret key'
 username = 'your whois api username'
 
 time = int(round(time.time() * 1000))
-req = base64.b64encode('{"t":' + str(time) + ',"u":"' + username + '"}')
-digest = hmac.new(secret, username + str(time) + key, hashlib.md5).hexdigest()
+req = base64.b64encode(
+    ('{"t":' + str(time) + ',"u":"' + username + '"}').encode('ascii')
+)
+digest = hmac.new(
+    secret.encode('ascii'), 
+    (username + str(time) + key).encode('ascii'), 
+    hashlib.md5
+).hexdigest()
 
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
-    + 'requestObject=' + req + '&digest=' + digest + '&domainName=' + domain
+    + 'requestObject=' + req.decode('ascii') + '&digest=' + digest\
+    + '&domainName=' + domain
 
 print(urlopen(url).read().decode('utf8'))

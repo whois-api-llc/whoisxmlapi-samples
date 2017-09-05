@@ -1,0 +1,31 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+<script type="text/javascript">
+
+    const key = "your whois api public key";
+    const secret = "your whois api secret key";
+    const username = "your whois api username";
+
+    const url = 'https://whoisxmlapi.com/whoisserver/EmailVerifyService?';
+    const email = 'support@whoisxmlapi.com';
+
+    $(function () {
+        var time = (new Date()).getTime();
+        var req = btoa(unescape(
+            encodeURIComponent(JSON.stringify({t:time,u:username}))));
+        var digest = CryptoJS.HmacMD5(
+            username+time+key,secret).toString(CryptoJS.enc.Hex);
+        $.ajax({
+            url: url,
+            dataType: "jsonp",
+            data: {
+                requestObject: req, digest: digest, emailAddress: email,
+                validateDNS: true, validateSMTP: true, checkCatchAll: true,
+                checkFree: true, checkDisposable: true, outputFormat: "JSON"
+            },
+            complete: function(data) {
+                $("body").append("<pre>" + JSON.stringify(data.responseJSON, "",2) +"</pre>");
+            }
+        });
+    });
+</script>

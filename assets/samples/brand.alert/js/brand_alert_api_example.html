@@ -1,0 +1,26 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+    //     Fill in your details
+    var username = "Your whois api username";
+    var password = "Your whois api password";
+    var term1 = "cinema";
+    var format = "JSON";
+
+    window.addEventListener("load", onPageLoad, false);
+
+    function onPageLoad() {
+        $.ajax({
+            url: "https://www.whoisxmlapi.com/brand-alert-api/search.php?",
+            dataType: "json",
+            data: {
+                term1: term1,
+                username: username,
+                password: password,
+                outputFormat: format
+            },
+            success: function(data) {
+                $("body").append("<pre>"+ JSON.stringify(data,"",2)+"</pre>");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,10 @@
+<?php
+
+$term = 'wikimedia';
+$password = '123456789sfghraninj357';
+$username = 'foo';
+
+$url ="https://www.whoisxmlapi.com/reverse-whois-api/search.php?term={$term}"
+     ."&username={$username}&password={$password}&mode=preview";
+
+print(file_get_contents($url));
