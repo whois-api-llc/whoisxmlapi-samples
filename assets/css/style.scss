@@ -38,3 +38,34 @@ img.center {
 .main-content h1 {
   color: #0f095e;
 }
+
+.toc {
+  display: block;
+  padding-bottom: 10px;
+  width:  100%;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.toc-item {
+  padding: 0 20px;
+  display: inline;
+  border: 1px solid #dfdfdf;
+  border-radius: 5px;
+  background: #fafafa;
+  margin: 0 5px;
+  white-space: nowrap;
+}
+
+a.button:hover .toc-item {
+  background: #eee;
+}
+
+a.button:hover {
+  text-decoration: none;
+}
+
+a.button {
+  margin-top: 5px !important;
+  display: inline-block;
+}
