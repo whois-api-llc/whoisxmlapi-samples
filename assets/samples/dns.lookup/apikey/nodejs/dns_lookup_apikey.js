@@ -4,7 +4,7 @@ var http = require('http');
 var domain = 'example.com';
 var key = 'your whois api key';
 var secret = 'your whois api secret key';
-var username = 'your whois username';
+var username = 'your whois api username';
 
 var time = (new Date).getTime();
 var req = Buffer.from('{"t":'+time+',"u":"'+username+'"}').toString('base64');
