@@ -1,11 +1,11 @@
 <div class="toc">
-        <a class="button" href="/brand.alert.html"><div class="toc-item">Brand Alert API</div></a>
-	<a class="button" href="/bulk.whois.html"><div class="toc-item">Bulk Whois API</div></a>
-        <a class="button" href="/domain.availability.html"><div class="toc-item">Domain Availability API</div></a>
-	<a class="button" href="/email.verifier.html"><div class="toc-item">Email Verification API</div></a>
-        <a class="button" href="/reg.alert.html"><div class="toc-item">Registrant Alert API</div></a>
-        <a class="button" href="/reverse.whois.html"><div class="toc-item">Reverse Whois API</div></a>
-	<a class="button" href="/"><div class="toc-item">Whois API</div></a>
+        <a class="button" href="./brand.alert.html"><div class="toc-item">Brand Alert API</div></a>
+	<a class="button" href="./bulk.whois.html"><div class="toc-item">Bulk Whois API</div></a>
+        <a class="button" href="./domain.availability.html"><div class="toc-item">Domain Availability API</div></a>
+	<a class="button" href="./email.verifier.html"><div class="toc-item">Email Verification API</div></a>
+        <a class="button" href="./reg.alert.html"><div class="toc-item">Registrant Alert API</div></a>
+        <a class="button" href="./reverse.whois.html"><div class="toc-item">Reverse Whois API</div></a>
+	<a class="button" href="./"><div class="toc-item">Whois API</div></a>
 </div>
 
 # Making a query to DNS Lookup API web service
