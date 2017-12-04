@@ -1,5 +1,6 @@
 gems:
     - jekyll-seo-tag
+    - jekyll-redirect-from
 author: whoisxmlapi
 description: >
   Code samples of making requests to whois api services of www.whoisxmlapi.com

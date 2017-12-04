@@ -1,3 +1,8 @@
+---
+redirect_to:
+    - https://whoisxmlapi.github.io/bulk-whois
+---
+
 <div class="toc">
         <a class="button" href="./brand.alert.html"><div class="toc-item">Brand Alert API</div></a>
 	<a class="button" href="./dns.lookup.html"><div class="toc-item">DNS Lookup API</div></a>

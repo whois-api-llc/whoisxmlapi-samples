@@ -1,3 +1,8 @@
+---
+redirect_to:
+    - https://whoisxmlapi.github.io/domain-availability
+---
+
 <div class="toc">
         <a class="button" href="./brand.alert.html"><div class="toc-item">Brand Alert API</div></a>
 	<a class="button" href="./bulk.whois.html"><div class="toc-item">Bulk Whois API</div></a>
