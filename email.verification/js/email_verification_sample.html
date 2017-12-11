@@ -1,0 +1,22 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+
+    const key = "Your_email_verification_api_key";
+
+    const url = 'https://emailverification.whoisxmlapi.com/api/v1?';
+    const email = 'support@whoisxmlapi.com';
+
+    $(function () {
+        $.ajax({
+            url: url,
+            dataType: "json",
+            data: {
+                emailAddress: email,
+                apiKey: key
+            },
+            complete: function(data) {
+                $("body").append("<pre>" + JSON.stringify(data.responseJSON, "",2) +"</pre>");
+            }
+        });
+    });
+</script>

@@ -1,14 +1,14 @@
 # Making a query to Whois API web service
 
-[WhoisXmlApi.com](https://www.whoisxmlapi.com/) has been gathering domain
-Whois records for almost all gTLDs and ccTLDs for over a decade.
-This data is unified, consistent, well parsed, and accurate and provided
-through real-time APIs.
+### [WhoisXmpApi.com](https://www.whoisxmlapi.com/) API samples has moved to our new repositories:
 
-Here you'll find examples of using
-[www.whoisxmlapi.com](https://www.whoisxmlapi.com/) Hosted Whois Web API
-implemented in multiple languages.
+1. [Brand Alert API samples repository](https://github.com/whois-api-llc/brand-alert)
+2. [Bulk Whois API samples repository](https://github.com/whois-api-llc/bulk-whois)
+3. [DNS Lookup API samples repository](https://github.com/whois-api-llc/dns-lookup)
+4. [Domain Availability API samples repository](https://github.com/whois-api-llc/domain-availability)
+5. [Email Verification API samples repository](https://github.com/whois-api-llc/email-verification)
+6. [Registration Alert API samples repository](https://github.com/whois-api-llc/registration-alert)
+7. [Reverse Whois API samples repository](https://github.com/whois-api-llc/reverse-whois)
+8. [Whois API samples repository](https://github.com/whois-api-llc/whois)
 
-Please, refer to
-[Whois API User Guide](https://www.whoisxmlapi.com/whois-api-guide.php) for
-authentication instructions.
+##### This repository may contains outdated code samples
