@@ -7,8 +7,8 @@
 3. [DNS Lookup API samples repository](https://github.com/whois-api-llc/dns-lookup)
 4. [Domain Availability API samples repository](https://github.com/whois-api-llc/domain-availability)
 5. [Email Verification API samples repository](https://github.com/whois-api-llc/email-verification)
-6. [Registration Alert API samples repository](https://github.com/whois-api-llc/registration-alert)
+6. [Registrant Alert API samples repository](https://github.com/whois-api-llc/registrant-alert)
 7. [Reverse Whois API samples repository](https://github.com/whois-api-llc/reverse-whois)
 8. [Whois API samples repository](https://github.com/whois-api-llc/whois)
 
-##### This repository may contains outdated code samples
+##### This repository may contain outdated code samples
