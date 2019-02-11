@@ -25,7 +25,8 @@ public class DomainAvailabilityApi {
 
         String url = "http://www.whoisxmlapi.com/whoisserver/WhoisService"
                    + "?requestObject=" + req + "&digest=" + hmac
-                   + "&domainName=" + DOMAIN + "&cmd=GET_DN_AVAILABILITY";
+                   + "&domainName=" + DOMAIN + "&cmd=GET_DN_AVAILABILITY"
+                   + "&getMode=DNS_AND_WHOIS";
 
         try (java.util.Scanner s =
                 new java.util.Scanner(new java.net.URL(url).openStream())) {

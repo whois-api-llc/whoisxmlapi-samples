@@ -13,7 +13,7 @@ var digest = hmac.digest('hex');
 
 var url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'
         + 'requestObject=' +req + '&digest=' +digest + '&domainName=' +domain
-        + '&cmd=GET_DN_AVAILABILITY';
+        + '&cmd=GET_DN_AVAILABILITY' + '&getMode=DNS_AND_WHOIS';
 
 http.get(url, function(response) {
     var str = '';

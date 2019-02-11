@@ -5,8 +5,8 @@ var password = 'Your whois api password';
 var username = 'Your whois api username';
 
 var url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'
-        + 'domainName=' +domain +'&username=' +username+'&password='+password
-        + '&cmd=GET_DN_AVAILABILITY';
+        + 'domainName=' + domain + '&username=' + username+'&password=' + password
+        + '&cmd=GET_DN_AVAILABILITY' + '&getMode=DNS_AND_WHOIS';
 
 http.get(url, function(response) {
     var str = '';

@@ -17,6 +17,7 @@ my $digest = uri_escape(hmac_md5_hex($username . $time . $key, $secret));
 
 my $url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'
         . "requestObject=$reqObj&digest=$digest&domainName=$domain"
-        . "&cmd=GET_DN_AVAILABILITY";
+        . "&cmd=GET_DN_AVAILABILITY"
+        . "&getMode=DNS_AND_WHOIS";
 
 print get($url);

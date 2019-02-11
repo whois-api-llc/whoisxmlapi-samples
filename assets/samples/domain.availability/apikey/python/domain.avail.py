@@ -26,5 +26,6 @@ digest = hmac.new(
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
     + 'requestObject=' + req.decode('ascii') + '&digest=' + digest \
     + '&domainName=' + domain + '&cmd=GET_DN_AVAILABILITY'
+    + '&getMode=DNS_AND_WHOIS'
 
 print(urlopen(url).read().decode('utf8'))

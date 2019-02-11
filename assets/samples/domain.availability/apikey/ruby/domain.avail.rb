@@ -14,6 +14,6 @@ digest = OpenSSL::HMAC.hexdigest(OpenSSL::Digest::MD5.new, secret, data)
 
 url = 'http://www.whoisxmlapi.com/whoisserver/WhoisService?'\
     + 'requestObject=' + req + '&digest=' + digest + '&domainName=' + domain\
-    + '&cmd=GET_DN_AVAILABILITY'
+    + '&cmd=GET_DN_AVAILABILITY' + '&getMode=DNS_AND_WHOIS'
 
 puts open(url).read

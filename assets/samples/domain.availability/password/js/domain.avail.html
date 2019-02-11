@@ -10,7 +10,7 @@
             dataType: "jsonp",
             data: {domainName: domain, username: username,
                    password: password, outputFormat: "JSON",
-                   cmd: "GET_DN_AVAILABILITY"},
+                   cmd: "GET_DN_AVAILABILITY", getMode: "DNS_AND_WHOIS"},
             success: function(data) {
                 $("body").append("<pre>"+ JSON.stringify(data,"",2)+"</pre>");
             }

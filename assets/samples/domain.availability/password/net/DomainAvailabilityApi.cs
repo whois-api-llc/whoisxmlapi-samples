@@ -10,7 +10,8 @@ class Program {
     static void Main() {
         string url = "http://www.whoisxmlapi.com/whoisserver/WhoisService?"
                    + $"domainName={DOMAIN}&username={USERNAME}"
-                   + $"&password={PASSWORD}&cmd=GET_DN_AVAILABILITY";
+                   + $"&password={PASSWORD}&cmd=GET_DN_AVAILABILITY"
+                   + $"&getMode=DNS_AND_WHOIS";
         string whoisData = string.Empty;
 
         HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);

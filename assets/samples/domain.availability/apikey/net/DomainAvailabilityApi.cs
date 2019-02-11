@@ -25,7 +25,8 @@ class Program {
 
         string url="http://www.whoisxmlapi.com/whoisserver/WhoisService?"
                   +$"requestObject={req}&digest={digest}&domainName={domain}"
-                  +"&cmd=GET_DN_AVAILABILITY";
+                  +"&cmd=GET_DN_AVAILABILITY"
+                  +"&getMode=DNS_AND_WHOIS";
         string whoisData = string.Empty;
 
         HttpWebRequest rq = (HttpWebRequest)WebRequest.Create(url);
