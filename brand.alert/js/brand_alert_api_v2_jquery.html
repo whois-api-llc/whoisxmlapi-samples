@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brand Alert API 2.0 jQuery Search Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+
+        var url = "https://brand-alert.whoisxmlapi.com/api/v2";
+        var apiKey = "Your brand alert api key";
+
+        var post_data = {
+            "apiKey": apiKey,
+            "sinceDate": "2018-06-15",
+            "mode": "purchase",
+            "responseFormat": "json",
+            "includeSearchTerms": [
+                "google",
+                "blog"
+            ],
+            "excludeSearchTerms": [
+                "analytics"
+            ]
+        };
+
+        $(function() {
+            $.post(
+                url,
+                JSON.stringify(post_data),
+                function(data) {
+                    $("body").append(
+                        "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+                }
+            );
+        });
+
+    </script>
+</head>
+<body></body>
+</html>

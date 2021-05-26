@@ -1,11 +1,21 @@
 <?php
 
-    $emailAddress = 'support@whoisxmlapi.com';
-    $apiKey = 'your_email_verification_api_key';
+$apiKey = 'Your email verification api key';
 
-    $url = "https://emailverification.whoisxmlapi.com/api/v1"
-         . "?emailAddress={$emailAddress}&apiKey={$apiKey}";
+$emailAddress = 'support@whoisxmlapi.com';
 
-    print(file_get_contents($url));
+$apiUrl = 'https://emailverification.whoisxmlapi.com/api/v1';
 
-?>
+$params = array(
+    'emailAddress' => $emailAddress,
+    'apiKey' => $apiKey
+);
+
+$url = $apiUrl . '?' . http_build_query($params, '', '&');
+
+print($url . PHP_EOL . PHP_EOL);
+
+$response = file_get_contents($url);
+
+print_r(json_decode($response));
+print(PHP_EOL);

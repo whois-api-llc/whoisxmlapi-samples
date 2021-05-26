@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bulk Whois API jQuery Search Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+
+        var url = "https://www.whoisxmlapi.com/BulkWhoisLookup/bulkServices";
+
+        // Fill in your details
+        var apiKey = "Your bulk whois apiKey";
+
+        var domains = [
+            "google.com",
+            "youtube.com",
+            "facebook.com",
+            "whoisxmlapi.com"
+        ];
+
+        function api(path, data, callback) {
+            var baseData = {
+                apiKey: apiKey,
+                outputFormat: "json"
+            };
+
+            $.ajax(
+                {
+                    url: url + path,
+                    type: "post",
+                    data: JSON.stringify(Object.assign({}, baseData, data)),
+                    dataType: "json",
+                    complete: function(data) {
+                        callback(data.responseJSON);
+                    }
+                }
+            );
+        }
+
+        $(function() {
+            var createRequestParams = {
+                domains: domains
+            };
+
+            $("#progress").append("Requesting bulk processing...<br>");
+
+            api("/bulkWhois", createRequestParams, function(body) {
+                var getRecordsParams = {
+                    requestId: body.requestId,
+                    startIndex: domains.length + 1,
+                    maxRecords: 0
+                };
+
+                if (body.messageCode != 200) {
+                    $("#error").append(body.message);
+                    return;
+                }
+
+                $("#progress").append(
+                    "Got request ID: " + body.requestId + "<br>");
+
+                $("#progress").append("Waiting for processing...<br>");
+                $("#progress").append("Records left: ");
+
+                var timer = setInterval(function() {
+                    api("/getRecords", getRecordsParams, function(body) {
+
+                        if (body.recordsLeft) {
+                            $("#progress").append(
+                                " " + body.recordsLeft + "...");
+                            return;
+                        }
+
+                        $("#progress").append(" 0<br>");
+                        $("#progress").append("Downloading data...<br>");
+
+                        clearInterval(timer);
+
+                        if (typeof body.recordsLeft === "undefined") {
+                            return;
+                        }
+
+                        getRecordsParams.startIndex = 1;
+                        getRecordsParams.maxRecords = domains.length;
+
+                        api("/getRecords", getRecordsParams, function(body) {
+                            $.each(body.whoisRecords, function(index, value) {
+                                $("#json").append(
+                                    JSON.stringify(value.whoisRecord,null,2));
+                            });
+                        });
+                    });
+                },
+                3000);
+            });
+        });
+
+    </script>
+</head>
+<body></body>
+<div id="error"><div>
+<div id="progress"></div>
+<pre id="json"></pre>
+</html>

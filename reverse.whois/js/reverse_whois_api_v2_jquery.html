@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reverse Whois API 2.0 jQuery Search Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+
+        var url = "https://reverse-whois-api.whoisxmlapi.com/api/v2";
+        var apiKey = "Your reverse whois api key";
+
+        var post_data_basic = {
+            "apiKey": apiKey,
+            "sinceDate": "2018-07-15",
+            "mode": "purchase",
+            "basicSearchTerms": {
+                "include": [
+                    "cinema",
+                ],
+                "exclude": [
+                    "online"
+                ]
+            }
+        };
+
+        var post_data_advanced = {
+            "apiKey": apiKey,
+            "sinceDate": "2018-07-15",
+            "mode": "purchase",
+            "advancedSearchTerms": [
+                {
+                    "field": "RegistrantContact.Name",
+                    "term": "Test"
+                }
+            ]
+        };
+
+        $(function() {
+            $.post(
+                url,
+                JSON.stringify(post_data_basic),
+                function(data) {
+                    $("body").append("Basic:<br>"
+                        + "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+                }
+            );
+            $.post(
+                url,
+                JSON.stringify(post_data_advanced),
+                function(data) {
+                    $("body").append("Advanced:<br>"
+                        + "<pre>" + JSON.stringify(data, null, 2) + "</pre>");
+                }
+            );
+        });
+
+    </script>
+</head>
+<body></body>
+</html>

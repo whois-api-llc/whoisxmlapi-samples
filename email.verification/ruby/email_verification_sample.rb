@@ -1,26 +1,29 @@
-require 'open-uri'
+require 'erb'
 require 'json'
+require 'net/https'
 require 'rexml/document'
 require 'rexml/xpath'
-require 'yaml'		# only needed to print the returned result in a very pretty way
+require 'yaml'
 
 ########################
 # Fill in your details #
 ########################
-apiKey = "Your_email_verification_api_key"
+api_key = 'Your email verification api key'
 
-emailAddress = "support@whoisxmlapi.com"
+email_address = 'support@whoisxmlapi.com'
 
-#######################
-# Use a JSON resource #
-#######################
-url = 'https://emailverification.whoisxmlapi.com/api/v1?' +
-    'apiKey=' + apiKey +
-    '&emailAddress=' + emailAddress
+url = 'https://emailverification.whoisxmlapi.com/api/v1' \
+      '?apiKey=' + ERB::Util.url_encode(api_key) +
+      '&emailAddress=' + ERB::Util.url_encode(email_address) +
+      '&outputFormat='
 
-format = "JSON"
+#########################
+# Use the JSON resource #
+#########################
+format = 'JSON'
+
 # Open the resource
-buffer = open(url + '&outputFormat=' + format).read
+buffer = Net::HTTP.get(URI.parse(url + format))
 
 # Parse the JSON result
 result = JSON.parse(buffer)
@@ -28,43 +31,55 @@ result = JSON.parse(buffer)
 # Print out a nice informative string
 puts "JSON:\n" + result.to_yaml + "\n"
 
-#######################
-# Use an XML resource #
-#######################
-format = "XML"
+########################
+# Use the XML resource #
+########################
+format = 'XML'
 
 # Open the resource
-buffer = open(url + '&outputFormat=' + format).read
+buffer = Net::HTTP.get(URI.parse(url + format))
 
 # Parse the XML result
 result = REXML::Document.new(buffer)
 
-# Get a few data members and make sure they aren't nil
-if ((errorMessage = REXML::XPath.first(result, "/ErrorMessage/msg")) != nil)
-	puts "XML:\nErrorMessage:\n\t" + errorMessage.text
+# Get a few data elements and make sure they aren't nil
+if !(error_message = REXML::XPath.first(result, '/ErrorMessage/msg')).nil?
+  puts "XML:\nErrorMessage:\n\t" + error_message.text
 else
-  emailAddress = (emailAddress = REXML::XPath.first(result, "/EmailVerifyRecord/emailAddress")) == nil ? '' : emailAddress.text
-  validFormat = (validFormat = REXML::XPath.first(result, "/EmailVerifyRecord/formatCheck")) == nil ? '' : validFormat.text
-  smtp = (smtp = REXML::XPath.first(result, "/EmailVerifyRecord/smtpCheck")) == nil ? '' : smtp.text
-  dns = (dns = REXML::XPath.first(result, "/EmailVerifyRecord/dnsCheck")) == nil ? '' : dns.text
-  free = (free = REXML::XPath.first(result, "/EmailVerifyRecord/freeCheck")) == nil ? '' : free.text
-  disposable = (disposable = REXML::XPath.first(result, "/EmailVerifyRecord/disposableCheck")) == nil ? '' : disposable.text
-  catchAll = (catchAll = REXML::XPath.first(result, "/EmailVerifyRecord/catchAllCheck")) == nil ? '' : catchAll.text
-  mxs = (mxs = REXML::XPath.first(result, "/EmailVerifyRecord/mxRecords")) == nil ? '' : mxs
+  el_all = '/EmailVerifyRecord/catchAllCheck'
+  el_disp = '/EmailVerifyRecord/disposableCheck'
+  el_dns = '/EmailVerifyRecord/dnsCheck'
+  el_fmt = '/EmailVerifyRecord/formatCheck'
+  el_free = '/EmailVerifyRecord/freeCheck'
+  el_mail = '/EmailVerifyRecord/emailAddress'
+  el_mxs = '/EmailVerifyRecord/mxRecords'
+  el_smtp = '/EmailVerifyRecord/smtpCheck'
 
-  puts "XML:\n---\n" +
-      " emailAddress: " + emailAddress +"\n  validFormat: " + validFormat +
-      "\n  smtp: " + smtp +
-      "\n  dns: " + dns +
-      "\n  free: " + free +
-      "\n  disposable: " + disposable +
-      "\n  catchAll: " + catchAll +
-      "\n  mxs:"
-  mxs.each_element {
-      |el| print_el = el.to_s
-      print_el = print_el.gsub("<string>", "\  - ")
-      print_el = print_el.gsub("</string>", "")
-      puts print_el
-  }
+  all = (all = REXML::XPath.first(result, el_all)).nil? ? '' : all.text
+  disp = (disp = REXML::XPath.first(result, el_disp)).nil? ? '' : disp.text
+  dns = (dns = REXML::XPath.first(result, el_dns)).nil? ? '' : dns.text
+  fmt = (fmt = REXML::XPath.first(result, el_fmt)).nil? ? '' : fmt.text
+  free = (free = REXML::XPath.first(result, el_free)).nil? ? '' : free.text
+  mail = (mail = REXML::XPath.first(result, el_mail)).nil? ? '' : mail.text
+  mxs = (mxs = REXML::XPath.first(result, el_mxs)).nil? ? [] : mxs
+  smtp = (smtp = REXML::XPath.first(result, el_smtp)).nil? ? '' : smtp.text
+
+  puts "XML:\n---\n" \
+       ' emailAddress: ' + mail +
+       "\n  validFormat: " + fmt +
+       "\n  smtp: " + smtp +
+       "\n  dns: " + dns +
+       "\n  free: " + free +
+       "\n  disposable: " + disp +
+       "\n  catchAll: " + all +
+       "\n  mxs:"
+
+  mxs.each do |el|
+    print_el = el.to_s
+    next unless print_el.include? 'mxRecord'
+    print_el = print_el.gsub('<mxRecord>', '    - ')
+    print_el = print_el.gsub('</mxRecord>', '')
+    puts print_el
+  end
 
 end

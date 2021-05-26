@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reverse Whois API 2.0 Header Auth jQuery Search Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+
+        var url = "https://reverse-whois-api.whoisxmlapi.com/api/v2";
+        var apiKey = "Your reverse whois api key";
+
+        var data_basic = {
+            "sinceDate": "2018-07-15",
+            "mode": "purchase",
+            "basicSearchTerms": {
+                "include": [
+                    "cinema",
+                ],
+                "exclude": [
+                    "online"
+                ]
+            }
+        };
+
+        var data_advanced = {
+            "sinceDate": "2018-07-15",
+            "mode": "purchase",
+            "advancedSearchTerms": [
+                {
+                    "field": "RegistrantContact.Name",
+                    "term": "Test"
+                }
+            ]
+        };
+
+        function sendQuery(isAdvanced=false) {
+            $.ajax(
+                {
+                    url: url,
+                    type: "post",
+                    data:
+                      JSON.stringify(isAdvanced ? data_advanced : data_basic),
+                    headers: {
+                        "X-Authentication-Token": apiKey
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        $("body").append(
+                            (isAdvanced ? "Advanced" : "Basic") + "<br>"
+                            + "<pre>" +JSON.stringify(data,null,2) +"</pre>");
+                    }
+                }
+            );
+        }
+
+        $(function() {
+            sendQuery();
+            sendQuery(true);
+        });
+
+    </script>
+</head>
+<body></body>
+</html>

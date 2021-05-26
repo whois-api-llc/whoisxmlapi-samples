@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DNS Lookup API jQuery Search Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+
+        var url = "https://www.whoisxmlapi.com/whoisserver/DNSService";
+        // Fill in your details
+        var apiKey = "Your dns lookup api key";
+        var domain = "google.com";
+        var format = "JSON";
+        var type = "_all";
+
+        $(function() {
+            $.ajax(
+                {
+                    url: url,
+                    dataType: "jsonp",
+                    data: {
+                        type: type,
+                        domainName: domain,
+                        apiKey: apiKey,
+                        outputFormat: format
+                    },
+                    success: function(data) {
+                        $("body").append(
+                            "<pre>" + JSON.stringify(data,null,2) + "</pre>");
+                    }
+                }
+            );
+        });
+
+    </script>
+</head>
+<body></body>
+</html>

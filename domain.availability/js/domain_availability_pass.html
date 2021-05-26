@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Domain Availability API jQuery Search Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+
+        var url = "https://domain-availability.whoisxmlapi.com/api/v1";
+        // Fill in your details
+        var apiKey = "Your domain availability api key";
+        var domain = "google.com";
+        var format = "JSON";
+
+        $(function() {
+            $.ajax(
+                {
+                    url: url,
+                    dataType: "json",
+                    data: {
+                        domainName: domain,
+                        apiKey: apiKey,
+                        outputFormat: format
+                    },
+                    success: function(data) {
+                        $("body").append(
+                            "<pre>"+ JSON.stringify(data, null, 2) +"</pre>");
+                    }
+                }
+            );
+        });
+    </script>
+</head>
+<body></body>
+</html>
