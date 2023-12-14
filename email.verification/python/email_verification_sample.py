@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ETree
 api_key = 'Your email verification api key'
 email = 'support@whoisxmlapi.com'
 
-api_url = 'https://emailverification.whoisxmlapi.com/api/v1'
+api_url = 'https://emailverification.whoisxmlapi.com/api/v3'
 
 url = api_url\
     + '?emailAddress=' + pathname2url(email)\
