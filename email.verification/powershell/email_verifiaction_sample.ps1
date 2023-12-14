@@ -1,4 +1,4 @@
-$url = 'https://emailverification.whoisxmlapi.com/api/v1'
+$url = 'https://emailverification.whoisxmlapi.com/api/v3'
 
 ########################
 # Fill in your details #
