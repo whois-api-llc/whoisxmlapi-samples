@@ -30,7 +30,7 @@ public class EmailVerificationApiSample
 
     public String getEmailInfo(String emailAddress, String apiKey)
     {
-        String url = "https://emailverification.whoisxmlapi.com/api/v1";
+        String url = "https://emailverification.whoisxmlapi.com/api/v3";
         String sb;
 
         try {
