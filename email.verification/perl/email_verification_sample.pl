@@ -14,7 +14,7 @@ use warnings;
 my $api_key = 'Your email verification api key';
 my $emailAddress = 'support@whoisxmlapi.com';
 
-my $base_url = 'https://emailverification.whoisxmlapi.com/api/v1';
+my $base_url = 'https://emailverification.whoisxmlapi.com/api/v3';
 
 
 #########################
