@@ -12,7 +12,7 @@ api_key = 'Your email verification api key'
 
 email_address = 'support@whoisxmlapi.com'
 
-url = 'https://emailverification.whoisxmlapi.com/api/v1' \
+url = 'https://emailverification.whoisxmlapi.com/api/v3' \
       '?apiKey=' + ERB::Util.url_encode(api_key) +
       '&emailAddress=' + ERB::Util.url_encode(email_address) +
       '&outputFormat='
