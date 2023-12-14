@@ -4,7 +4,7 @@ var querystring = require('querystring');
 var api_key = 'Your email verification api key';
 var email = 'support@whoisxmlapi.com';
 
-var url = 'https://emailverification.whoisxmlapi.com/api/v1';
+var url = 'https://emailverification.whoisxmlapi.com/api/v3';
 
 var params = {
     apiKey: api_key,
