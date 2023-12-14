@@ -4,7 +4,7 @@ $apiKey = 'Your email verification api key';
 
 $emailAddress = 'support@whoisxmlapi.com';
 
-$apiUrl = 'https://emailverification.whoisxmlapi.com/api/v1';
+$apiUrl = 'https://emailverification.whoisxmlapi.com/api/v3';
 
 $params = array(
     'emailAddress' => $emailAddress,
