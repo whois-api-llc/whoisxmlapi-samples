@@ -46,7 +46,7 @@ namespace EmailVerificationApi
         public string ApiKey { get; set; }
         
         private const string Url =
-            "https://emailverification.whoisxmlapi.com/api/v1";
+            "https://emailverification.whoisxmlapi.com/api/v3";
         
         public string SendGet(string email)
         {
